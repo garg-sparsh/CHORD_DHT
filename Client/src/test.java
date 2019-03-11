@@ -130,7 +130,7 @@ public class test extends Thread {
                         nearestIP = peerNode.nearestPeer(zoneQuery);
                     }
                     MakeMessage makeMessage = new MakeMessage();
-                    sendData = makeMessage.message_creation(sendData, messageSize, "isMyZone", messagePos);
+                    sendData = makeMessage.message_creation(sendData, messageSize, nearestIP, messagePos);
                     dataOutputStream.write(sendData);
                     dataOutputStream.flush();
                 }
@@ -374,7 +374,7 @@ class PeerZoneManager extends Thread {
                 String message = new String(recvData).trim();
 
                 if (message.contains("add")) {
-                    add(dataInputStream, dataOutputStream);
+                    add(dataOutputStream);
 
                     try {
                         Thread.sleep(1000);
@@ -492,11 +492,10 @@ class PeerZoneManager extends Thread {
         }
         /**
          * method to initiate node join in chord
-         * @param dataInputStream
          * @param dataOutputStream
          * @throws IOException
          */
-        private void add(DataInputStream dataInputStream, DataOutputStream dataOutputStream) throws IOException {
+        private void add(DataOutputStream dataOutputStream) throws IOException {
             int midPoint = PeerNode.getMyZoneSrt() + ((PeerNode.getMyZoneEnd() - PeerNode.getMyZoneSrt()) / 2);
 
             if ( PeerNode.getMyIP().equals( PeerNode.getPredecessor().getIP() )
