@@ -770,6 +770,7 @@ class PeerFileManager extends Thread {
         }
         else{
             System.out.println(filePath+" is not available please try again");
+            PeerNode.printOptionsMenu();
         }
 
     }
@@ -825,7 +826,10 @@ class PeerFileManager extends Thread {
             fos.close();
             System.out.println("Download complete.");
         }
-        PeerNode.printOptionsMenu();
+        else{
+            System.out.println(filePath+" not available");
+            PeerNode.printOptionsMenu();
+        }
     }
 
     /**
