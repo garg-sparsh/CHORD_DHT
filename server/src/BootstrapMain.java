@@ -5,7 +5,6 @@ import java.io.IOException;
  *
  * The class BootstrapMain is the main class for Bootstrap
  *
- * @author Srinath Kanna, Krishna Prasad, Ajeeth Kannan
  */
 public class BootstrapMain 
 {

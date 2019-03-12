@@ -13,8 +13,6 @@ import java.util.Random;
  * The class BootstrapListener listens for peers that need to join
  * into the chord network. The class is a thread which listens for
  * multiple clients at a given point.
- *
- * @author Srinath Kanna, Krishna Prasad, Ajeeth Kannan
  */
 public class BootstrapListener extends Thread {
 	
@@ -66,8 +64,6 @@ public class BootstrapListener extends Thread {
 	 * peer is the first peer to the network, the Bootstrap makes the peer
 	 * as the entry point.
 	 *
-	 *
-	 * @author Srinath Kanna, Krishna Prasad, Ajeeth Kannan
 	 */
 	private class BootstrapHandler extends Thread {
 
@@ -184,7 +180,6 @@ class BootstrapEntryListener extends Thread {
 	 * The class is a supporting class for BootstrapEntryListener. It responses
 	 * to the peers that sends its IP as entry point.
 	 *
-	 * @author Srinath Kanna, Krishna Prasad, Ajeeth Kannan
 	 */
 	private class BootstrapEntryHandler extends Thread {
 

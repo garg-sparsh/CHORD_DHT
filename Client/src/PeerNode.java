@@ -2,14 +2,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.Socket;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
 import java.util.zip.CRC32;
@@ -128,12 +124,10 @@ public class PeerNode {
 	 * @param randomNumber
 	 * @param entryPoint
      */
-	public PeerNode(int randomNumber, String entryPoint) {
+	public PeerNode(int randomNumber, String entryPoint, String currentIP) {
 		System.out.println("entryPoint:"+entryPoint+" "+randomNumber);
-
+		myIP = currentIP;
 		isEntryPoint = PeerMain.isEntryPoint;
-
-		MyIP();
 
 		if (PeerMain.isEntryPoint) {
 			myZoneSrt = 0;
@@ -512,24 +506,24 @@ public class PeerNode {
 	/**
 	 * MyIP method returns this node's IP address.
 	 */
-	private void MyIP() {
-		try {
-			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-			while (interfaces.hasMoreElements()) {
-				NetworkInterface iface = interfaces.nextElement();
-				if (iface.isLoopback() || !iface.isUp())
-					continue;
-
-				Enumeration<InetAddress> addresses = iface.getInetAddresses();
-				while (addresses.hasMoreElements()) {
-					InetAddress addr = addresses.nextElement();
-					myIP = addr.getHostAddress();
-				}
-			}
-		} catch (SocketException e) {
-			throw new RuntimeException(e);
-		}
-	}
+//	private void MyIP() {
+//		try {
+//			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+//			while (interfaces.hasMoreElements()) {
+//				NetworkInterface iface = interfaces.nextElement();
+//				if (iface.isLoopback() || !iface.isUp())
+//					continue;
+//
+//				Enumeration<InetAddress> addresses = iface.getInetAddresses();
+//				while (addresses.hasMoreElements()) {
+//					InetAddress addr = addresses.nextElement();
+//					myIP = addr.getHostAddress();
+//				}
+//			}
+//		} catch (SocketException e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 
 
 	/**
@@ -647,49 +641,71 @@ public class PeerNode {
      */
 	public String nearestPeer(int zone) {
 
-		int nearestZone;
-
-		String nearestIP;
+//		int nearestZone;
+//
+//		String nearestIP;
+//
+//		int tempNearestZone;
+//		String tempNearestIP;
+//
+//		nearestZone = myZoneEnd + PeerNode.peerLookUP.getZonePos(0);
+//		System.out.println("nearestZone:"+nearestZone);
+//		if (nearestZone >= PeerMain.n) {
+//			nearestZone = nearestZone % PeerMain.n;
+//		}
+//
+//		nearestIP = PeerNode.peerLookUP.getPeerIP(0);
+//		int nearestSub = zone - nearestZone;
+//		if (nearestSub < 0) {
+//			nearestSub = PeerMain.n + nearestSub;
+//		}
+//		System.out.println("nearestSub:"+nearestSub);
+//		for (int i = 1; i < PeerMain.m; i++) {
+//			tempNearestZone = PeerNode.peerLookUP.getZonePos(i);
+//			if (tempNearestZone < 0) {
+//				tempNearestZone = PeerMain.n + tempNearestZone;
+//			}
+//			tempNearestIP = PeerNode.peerLookUP.getPeerIP(i);
+//			int tempSub = zone - tempNearestZone;
+//			if (tempSub < 0) {
+//				tempSub = PeerMain.n + tempSub;
+//			}
+//			if (tempSub < nearestSub && tempSub >= 0) {
+//				nearestZone = tempNearestZone;
+//				nearestIP = tempNearestIP;
+//				nearestSub = tempSub;
+//			}
+//			System.out.println("nearestSub_new:"+nearestSub);
+//
+//		}
+//		System.out.println("nearestIP_new:"+nearestIP);
+//		return nearestIP;
+		int nearestZone = myZoneEnd + PeerNode.peerLookUP.getZone(0);
+		String nearestIP = PeerNode.peerLookUP.getPeerIP(0);;
+		int nearestSub = zone - nearestZone;
 
 		int tempNearestZone;
 		String tempNearestIP;
 
-		nearestZone = myZoneEnd + PeerNode.peerLookUP.getZonePos(0);
-		System.out.println("nearestZone:"+nearestZone);
-		if (nearestZone >= PeerMain.n) {
-			nearestZone = nearestZone % PeerMain.n;
-		}
-
-		nearestIP = PeerNode.peerLookUP.getPeerIP(0);
-
-		System.out.println("nearestIP:"+nearestIP);
-		int nearestSub = zone - nearestZone;
-		if (nearestSub < 0) {
-			nearestSub = PeerMain.n + nearestSub;
-		}
-		System.out.println("nearestSub:"+nearestSub);
-		for (int i = 1; i < PeerMain.m; i++) {
-			tempNearestZone = PeerNode.peerLookUP.getZonePos(i);
-			System.out.println("tempNearestZone:"+tempNearestZone);
-			if (tempNearestZone < 0) {
-				tempNearestZone = PeerMain.n + tempNearestZone;
+		for (int i = 1;i<PeerMain.m;i++){
+			tempNearestZone = myZoneEnd + PeerNode.peerLookUP.getZone(i);
+			if (tempNearestZone >= PeerMain.n) {
+				tempNearestZone = tempNearestZone % PeerMain.n;
 			}
 			tempNearestIP = PeerNode.peerLookUP.getPeerIP(i);
-			System.out.println("tempNearestIP:"+tempNearestIP);
 			int tempSub = zone - tempNearestZone;
+
 			if (tempSub < 0) {
 				tempSub = PeerMain.n + tempSub;
 			}
-			System.out.println("tempSub:"+tempSub);
 			if (tempSub < nearestSub && tempSub >= 0) {
-				nearestZone = tempNearestZone;
 				nearestIP = tempNearestIP;
 				nearestSub = tempSub;
 			}
-			System.out.println("nearestSub_new:"+nearestSub);
+
 
 		}
-		System.out.println("nearestIP_new:"+nearestSub);
+
 		return nearestIP;
 
 	}

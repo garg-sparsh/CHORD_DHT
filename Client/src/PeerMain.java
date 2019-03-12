@@ -12,7 +12,6 @@ import java.util.Arrays;
  * peer is the first peer to the network, the Bootstrap makes the peer
  * as the entry point.
  *
- * @author Srinath Kanna, Krishna Prasad, Ajeeth Kannan
  */
 public class PeerMain {
 
@@ -26,6 +25,8 @@ public class PeerMain {
 
 	private String entryPoint;
 
+	private String currentIP;
+
 	private byte recvByte[] = new byte[messageSize];
 
 	static boolean isEntryPoint = false;
@@ -38,7 +39,7 @@ public class PeerMain {
 		System.out.println("serverIP:"+serverIP);
 		peerMain.initialSetUp(serverIP);
 
-		PeerNode peerNode = new PeerNode(peerMain.randomNumberGenerated, peerMain.entryPoint);
+		PeerNode peerNode = new PeerNode(peerMain.randomNumberGenerated, peerMain.entryPoint, peerMain.currentIP);
 
 		peerNode.run();
 		
@@ -52,7 +53,7 @@ public class PeerMain {
 
 		try {
 			Socket socket = new Socket(serverIP, 8880);
-
+			currentIP = socket.getLocalSocketAddress().toString().replaceAll("^/+", "").split(":")[0];
 			DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
 
 			dataInputStream.read(recvByte, 0, recvByte.length);
