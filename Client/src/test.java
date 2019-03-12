@@ -757,16 +757,28 @@ class PeerFileManager extends Thread {
      */
     public void uploadFile(String path, boolean share) {
         filePath = path;
-        sendZoneTo = peerNode.hash(filePath);
-        System.out.println("File sending to zone :" + sendZoneTo);
-        if(!share)
-            readFile(!share);
-        else
-            readFile(share);
-        sendToIP = peerNode.getZoneIP(sendZoneTo, peerNode.nearestPeer(sendZoneTo));
-        makePackets();
-        sendPackets();
+        if(isFileAvailable(path)){
+            sendZoneTo = peerNode.hash(filePath);
+            System.out.println("File sending to zone :" + sendZoneTo);
+            if(!share)
+                readFile(!share);
+            else
+                readFile(share);
+            sendToIP = peerNode.getZoneIP(sendZoneTo, peerNode.nearestPeer(sendZoneTo));
+            makePackets();
+            sendPackets();
+        }
+        else{
+            System.out.println(filePath+" is not available please try again");
+        }
 
+    }
+
+    public boolean isFileAvailable(String path){
+        File f = new File(path);
+        if (f.exists() && !f.isDirectory())
+            return true;
+        return false;
     }
     /**
      * method to download a file from chord
