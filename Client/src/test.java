@@ -2,10 +2,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -14,8 +12,6 @@ import java.util.List;
  * The class is checks whether the requested zone number from a peer
  * is this peer's zone number. The class is a thread which can
  * support multiple clients at a given point.
- *
- * @author Srinath Kanna, Krishna Prasad, Ajeeth Kannan
  */
 public class test extends Thread {
 
@@ -78,7 +74,6 @@ public class test extends Thread {
      * to the peer by checking its zone.
      *
      *
-     * @author Srinath Kanna, Krishna Prasad, Ajeeth Kannan
      */
 
     private class PeerZoneCheckHandler extends Thread {
@@ -214,8 +209,6 @@ class PeerDetails extends Thread {
      * The class is a supporter class for PeerDetails. The class gives response
      * to the peer by giving details of this peer
      *
-     *
-     * @author Srinath Kanna, Krishna Prasad, Ajeeth Kannan
      */
     private class PeerDetailsHandler extends Thread {
 
@@ -338,7 +331,6 @@ class PeerZoneManager extends Thread {
     }
     /**
      * method to handle accepted thread of above class
-     * @author Srinath Kanna, Krishna Prasad and Ajeeth Kannan
      *
      */
     private class PeerZoneManagerHandler extends Thread {
@@ -821,10 +813,16 @@ class PeerFileManager extends Thread {
             }
             FileOutputStream fos = new FileOutputStream(String.valueOf(peerNode.hash(fileDetails[0])));
             System.out.println("File received.");
-            for (int j = 0; j < totalPackets - 1; j++) {
-                fos.write((fileInPackets[j]));
+
+            for (int j = 0; j <= totalPackets - 1; j++) {
+                try{
+                    byte[] decodedBytes = java.util.Base64.getDecoder().decode(new String(fileInPackets[j], "UTF-8").trim().getBytes());
+                    fos.write((decodedBytes));
+                }
+                catch (IllegalArgumentException e){
+                    fos.write((fileInPackets[j]));
+                }
             }
-            fos.write(new String(fileInPackets[totalPackets - 1]).trim().getBytes());
             fos.close();
             System.out.println("Download complete.");
         }

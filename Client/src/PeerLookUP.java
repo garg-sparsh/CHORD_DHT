@@ -141,6 +141,10 @@ public class PeerLookUP {
 	public int getZonePos( int i ) {
 		return lookUPPeerDetails[i].zonePos;
 	}
+
+	public int getZone( int i ) {
+		return lookUPPeerDetails[i].zone;
+	}
 	
 	public String getPeerIP( int i ) {
 		return lookUPPeerDetails[i].peerIP;
@@ -394,8 +398,6 @@ class PeerNeighbourUpdate extends Thread {
 	 *
 	 * The class is a supporter class for PeerNeighbourUpdate.
 	 *
-	 *
-	 * @author Srinath Kanna, Krishna Prasad, Ajeeth Kannan
 	 */
 	private class PeerNeighbourUpdateHandler extends Thread {
 
@@ -505,7 +507,6 @@ class PeerTransmitterListener extends Thread {
 	}
 	/**
 	 * class to handle the thread of the above class
-	 * @author Srinath Kanna, Krishna Prasad and Ajeeth Kannan
 	 *
 	 */
 	private class FileUploadHandler extends Thread {
@@ -608,20 +609,8 @@ class PeerTransmitterListener extends Thread {
 			System.arraycopy(fileInBytes, (totalPackets - 1) * messageSize, fileInPackets[totalPackets - 1], 0, (int) fileSize - (totalPackets - 1) * 1024);
 
 		}
-		/**
-		 * method to wrap the message to be sent to appropriate message length
-		 * @param message-message to be sent
-		 */
-		/*private void makeMessage(String message) {
 
-			Arrays.fill(sendData, 0, messageSize, (byte) 0);
-			byte messageByte[] = message.getBytes();
-			ByteBuffer byteBuffer = ByteBuffer.wrap(sendData);
-			byteBuffer.position(0);
-			byteBuffer.put(messageByte);
-			sendData = byteBuffer.array();
 
-		}*/
 
 	}
 
