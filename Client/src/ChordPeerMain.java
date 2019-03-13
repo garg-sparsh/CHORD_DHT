@@ -59,7 +59,7 @@ public class ChordPeerMain {
 			dataInputStream.read(recvByte, 0, recvByte.length);
 
 			String message = new String(Arrays.copyOfRange(recvByte, 0, messageSize)).trim(); //input from peer ie upload file, download file etc.
-			System.out.println("message:"+ message);
+
 			String messageArray[] = message.split(" ");
 
 			randomNumberGenerated = Integer.parseInt(messageArray[0]);

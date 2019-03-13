@@ -125,7 +125,7 @@ public class ChordNode {
 	 * @param entryPoint
      */
 	public ChordNode(int randomNumber, String entryPoint, String currentIP) {
-		System.out.println("entryPoint:"+entryPoint+" "+randomNumber);
+		System.out.println("Node number and IP: "+ randomNumber + " " + currentIP + "\n");
 		myIP = currentIP;
 		isEntryPoint = ChordPeerMain.isEntryPoint;
 
@@ -456,7 +456,6 @@ public class ChordNode {
 			makeMessage("add");
 			dataOutputStream.write(sendData);
 			dataOutputStream.flush();
-			System.out.println("Message is add");
 
 			dataInputStream.read(recvData, 0, recvData.length);
 

@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e918f5f2-8c47-4640-941c-8ec928a7882d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/PeerLookUP.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/NodeFT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/PeerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/ChordPeerMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/PeerNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/ChordNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/sample.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/KeySpace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/BootstrapListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/ChordListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/BootstrapMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/ChordMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/ChordNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/ChordNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/ChordPeerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/ChordPeerMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/KeySpace.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/KeySpace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/NodeFT.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/NodeFT.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,8 +19,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/src/ChordMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="17" column="21" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="21" />
+            <state relative-caret-position="270">
+              <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -32,26 +28,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/src/ChordListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-195">
-              <caret line="179" column="74" selection-start-line="179" selection-start-column="74" selection-end-line="179" selection-end-column="74" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Client/src/ChordPeerMain.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="79" column="9" lean-forward="true" selection-start-line="79" selection-start-column="9" selection-end-line="79" selection-end-column="9" />
+            <state relative-caret-position="82">
+              <caret line="192" column="33" lean-forward="true" selection-start-line="192" selection-start-column="33" selection-end-line="192" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Client/src/ChordPeerMain.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="540">
+              <caret line="61" selection-start-line="61" selection-end-line="61" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Client/src/ChordNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2258">
-              <caret line="53" column="32" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="32" />
+            <state relative-caret-position="308">
+              <caret line="127" column="87" selection-start-line="127" selection-start-column="87" selection-end-line="127" selection-end-column="87" />
             </state>
           </provider>
         </entry>
@@ -59,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/KeySpace.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2887">
-              <caret line="877" column="53" selection-start-line="876" selection-start-column="7" selection-end-line="877" selection-end-column="53" />
+            <state relative-caret-position="52">
+              <caret line="104" column="82" selection-start-line="104" selection-start-column="82" selection-end-line="104" selection-end-column="82" />
             </state>
           </provider>
         </entry>
@@ -68,8 +64,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/NodeFT.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2346">
-              <caret line="605" column="6" selection-start-line="605" selection-start-column="6" selection-end-line="605" selection-end-column="6" />
+            <state relative-caret-position="-795">
+              <caret line="550" column="99" selection-start-line="550" selection-start-column="99" selection-end-line="550" selection-end-column="99" />
             </state>
           </provider>
         </entry>
@@ -78,10 +74,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>addfileNames</find>
-      <find>PeerZoneManager</find>
-      <find>PeerDetails</find>
-      <find>PeerFileDownloadListener</find>
       <find>peerFileDownload</find>
       <find>peerCheckZone</find>
       <find>test</find>
@@ -107,6 +99,10 @@
       <find>getzoneend</find>
       <find>getnodeStart</find>
       <find>getnodeEnd</find>
+      <find>entry</find>
+      <find>ChordNode.g</find>
+      <find>totalpackets</find>
+      <find>Message</find>
       <find>makeMessage</find>
     </findStrings>
     <replaceStrings>
@@ -148,10 +144,11 @@
       <list>
         <option value="$PROJECT_DIR$/server/src/ChordMain.java" />
         <option value="$PROJECT_DIR$/server/src/ChordListener.java" />
-        <option value="$PROJECT_DIR$/Client/src/KeySpace.java" />
         <option value="$PROJECT_DIR$/Client/src/NodeLookUp.java" />
-        <option value="$PROJECT_DIR$/Client/src/ChordNode.java" />
         <option value="$PROJECT_DIR$/Client/src/ChordPeerMain.java" />
+        <option value="$PROJECT_DIR$/Client/src/KeySpace.java" />
+        <option value="$PROJECT_DIR$/Client/src/NodeFT.java" />
+        <option value="$PROJECT_DIR$/Client/src/ChordNode.java" />
       </list>
     </option>
   </component>
@@ -198,7 +195,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552508018663" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552518677722" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -265,7 +262,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32961586" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3283767" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32589838" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -292,45 +289,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ChordListener.java">
+    <entry file="file://$PROJECT_DIR$/server/src/ChordMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-195">
-          <caret line="179" column="74" selection-start-line="179" selection-start-column="74" selection-end-line="179" selection-end-column="74" />
+        <state relative-caret-position="270">
+          <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/KeySpace.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2887">
-          <caret line="877" column="53" selection-start-line="876" selection-start-column="7" selection-end-line="877" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/ChordNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2258">
-          <caret line="53" column="32" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="32" />
+        <state relative-caret-position="52">
+          <caret line="104" column="82" selection-start-line="104" selection-start-column="82" selection-end-line="104" selection-end-column="82" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/NodeFT.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2346">
-          <caret line="605" column="6" selection-start-line="605" selection-start-column="6" selection-end-line="605" selection-end-column="6" />
+        <state relative-caret-position="-795">
+          <caret line="550" column="99" selection-start-line="550" selection-start-column="99" selection-end-line="550" selection-end-column="99" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/ChordMain.java">
+    <entry file="file://$PROJECT_DIR$/server/src/ChordListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="17" column="21" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="21" />
+        <state relative-caret-position="82">
+          <caret line="192" column="33" lean-forward="true" selection-start-line="192" selection-start-column="33" selection-end-line="192" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/ChordPeerMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="79" column="9" lean-forward="true" selection-start-line="79" selection-start-column="9" selection-end-line="79" selection-end-column="9" />
+        <state relative-caret-position="540">
+          <caret line="61" selection-start-line="61" selection-end-line="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/ChordNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="127" column="87" selection-start-line="127" selection-start-column="87" selection-end-line="127" selection-end-column="87" />
         </state>
       </provider>
     </entry>

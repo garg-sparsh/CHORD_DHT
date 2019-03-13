@@ -549,7 +549,6 @@ class TransferListener extends Thread {
 			try {
 
 				DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-				System.out.println(new String(filePath + " " + totalPackets));
 				String data = (filePath + " " + totalPackets + " ");
 				MakeMessage makeMessage = new MakeMessage();
 				sendData = makeMessage.message_creation(sendData, messageSize, data);

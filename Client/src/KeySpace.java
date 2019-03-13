@@ -103,9 +103,6 @@ public class KeySpace extends Thread {
                 dataInputStream.read(recvData, 0, recvData.length);
 
                 int zoneQuery = Integer.parseInt( new String( recvData ).trim() );
-                System.out.println("zoneQuery:"+zoneQuery);
-
-                System.out.println("ChordNode.getNodeStart():"+ ChordNode.getNodeStart()+" "+ ChordNode.getNodeEnd());
 
                 if( zoneQuery >= ChordNode.getNodeStart() && zoneQuery <= ChordNode.getNodeEnd() ) {
                     MakeMessage makeMessage = new MakeMessage();
