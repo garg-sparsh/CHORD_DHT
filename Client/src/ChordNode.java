@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -130,55 +127,59 @@ public class ChordNode {
 			//Print options menu on command line
 			printOptionsMenu();
 
+			try{
+				int switchInt = scanner.nextInt();
+				switch (switchInt) {
 
-			int switchInt = scanner.nextInt();
+					case 1://Print node details including the list of finger tables
+						getDetails();
+						break;
+					case 2://Option to leave chord zone
+						if (myIP.equals(predecessor.getIP()) && myIP.equals(successor.getIP())) {
+							System.out.println("You are the only peer.");
+							System.out.println("At least one peer needed to maintain the chord!!!");
+							break;
+						}
+						if (!leaveChord()) {
+							System.out.println("Leave Zone failed. Try again.");
+						} else {
+							System.out.println("Leave Zone success. Node shutdown complete.");
+							isNodeRunning = false;
+						}
+						break;
+					case 3://Option to upload file to chord zone
+						System.out.println("Enter the file name to upload: ");
+						scanner = new Scanner(System.in);
+						filePath = scanner.nextLine();
+						NodeKeyManager peerFileUpload = new NodeKeyManager();
+						peerFileUpload.uploadFile(filePath, false);
+						break;
+					case 4://Option to download file from chord zone
+						System.out.print("Enter the file name for download: ");
+						scanner = new Scanner(System.in);
+						filePath = scanner.nextLine();
+						filePath = new File(filePath).getName();
+						NodeKeyManager nodeFileDownload = new NodeKeyManager();
+						try {
+							nodeFileDownload.downloadFile(filePath);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						break;
+					case 5://Print the list of files stored at this peer.
+						System.out.println("Files stored at this Peer :");
+						System.out.println(fileNames);
+						break;
 
-			switch (switchInt) {
+					default:
+						System.out.println("Enter the correct number");
 
-			case 1://Print node details including the list of finger tables
-				getDetails();
-				break;
-			case 2://Option to leave chord zone
-				if (myIP.equals(predecessor.getIP()) && myIP.equals(successor.getIP())) {
-					System.out.println("You are the only peer.");
-					System.out.println("At least one peer needed to maintain the chord!!!");
-					break;
 				}
-				if (!leaveChord()) {
-					System.out.println("Leave Zone failed. Try again.");
-				} else {
-					System.out.println("Leave Zone success. Node shutdown complete.");
-					isNodeRunning = false;
-				}
-				break;
-			case 3://Option to upload file to chord zone
-				System.out.println("Enter the file name to upload");
-				scanner = new Scanner(System.in);
-				filePath = scanner.nextLine();
-				NodeKeyManager peerFileUpload = new NodeKeyManager();
-				peerFileUpload.uploadFile(filePath, false);
-				break;
-			case 4://Option to download file from chord zone
-				System.out.print("Enter the file name for download");
-				scanner = new Scanner(System.in);
-				filePath = scanner.nextLine();
-				filePath = new File(filePath).getName();
-				NodeKeyManager nodeFileDownload = new NodeKeyManager();
-				try {
-					nodeFileDownload.downloadFile(filePath);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
-			case 5://Print the list of files stored at this peer.
-				System.out.println("Files stored at this Peer :");
-				System.out.println(fileNames);
-				break;
-
-			default:
-				System.out.println("Enter the correct number");
-
+			}
+			catch (InputMismatchException ime){
+				System.out.println("Invalid input");
+				printOptionsMenu();
 			}
 
 		}

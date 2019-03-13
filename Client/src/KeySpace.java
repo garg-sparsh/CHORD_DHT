@@ -417,7 +417,7 @@ class KeySpaceManager extends Thread {
 
         }
 
-        private void sendToChordMain() throws UnknownHostException, IOException {
+        private void sendToChordMain() throws IOException {
             Socket entrySocket = new Socket(  ChordPeerMain.serverIP, 8881 );
             DataOutputStream entryOutputStream = new DataOutputStream(entrySocket.getOutputStream());
 
