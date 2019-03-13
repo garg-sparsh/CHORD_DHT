@@ -373,7 +373,7 @@ class PeerZoneManager extends Thread {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
+                    System.out.println("Sharing files");
                     shareFilesToNewPeer();
                 } else if(message.contains("leave")) {
 
@@ -389,7 +389,7 @@ class PeerZoneManager extends Thread {
          * method  to send the file to new peer
          */
         private void shareFilesToNewPeer() {
-
+            System.out.println("Files are going to shared with new peer!!!!!!");
             PeerFileManager fileManager = new PeerFileManager();
             List<String> deleteList = new ArrayList<>();
 

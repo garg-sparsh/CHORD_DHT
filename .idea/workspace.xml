@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d039df7-92ac-4a40-8478-9a355b0b684f" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/172.21.101.198/3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/sample.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/PeerNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/PeerNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/test.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,11 +17,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Client/src/PeerNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25">
-              <caret line="643" column="1" selection-start-line="643" selection-start-column="1" selection-end-line="643" selection-end-column="1" />
+            <state relative-caret-position="364">
+              <caret line="461" column="46" selection-start-line="461" selection-start-column="46" selection-end-line="461" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#18549#18550#0" expanded="true" />
+                <element signature="e#18608#18609#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -33,8 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/PeerLookUP.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="265">
-              <caret line="144" column="22" selection-start-line="144" selection-start-column="15" selection-end-line="144" selection-end-column="22" />
+            <state relative-caret-position="-973">
+              <caret line="465" column="11" selection-start-line="465" selection-start-column="11" selection-end-line="465" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -42,8 +39,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="548">
-              <caret line="124" column="51" selection-start-line="124" selection-start-column="51" selection-end-line="124" selection-end-column="51" />
+            <state relative-caret-position="1223">
+              <caret line="367" column="46" lean-forward="true" selection-start-line="367" selection-start-column="46" selection-end-line="367" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#run#0;class#test#0" />
@@ -72,15 +69,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Download Started</find>
-      <find>8880</find>
-      <find>requestIP</find>
-      <find>upload</find>
-      <find>Zone details</find>
-      <find>mkdirs</find>
-      <find>Case</find>
-      <find>Peer</find>
-      <find>make</find>
       <find>makeMessage</find>
       <find>void makeMessage</find>
       <find>FILE rece</find>
@@ -101,8 +89,20 @@
       <find>nearest</find>
       <find>9990</find>
       <find>zoneQ</find>
+      <find>make</find>
       <find>uploadfile</find>
+      <find>PeerNode.getMy</find>
+      <find>PeerTra</find>
+      <find>readfile</find>
+      <find>split</find>
+      <find>midpoint</find>
+      <find>peerFileUpload</find>
+      <find>shareFilesToNewPeer</find>
+      <find>9991</find>
     </findStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/server</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -133,10 +133,11 @@
         <option value="$PROJECT_DIR$/Client/src/PeerLookUP.java" />
         <option value="$PROJECT_DIR$/Client/src/test.java" />
         <option value="$PROJECT_DIR$/server/src/BootstrapListener.java" />
-        <option value="$PROJECT_DIR$/Client/src/test.java" />
         <option value="$PROJECT_DIR$/server/src/BootstrapMain.java" />
         <option value="$PROJECT_DIR$/Client/src/PeerMain.java" />
         <option value="$PROJECT_DIR$/Client/src/PeerLookUP.java" />
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+        <option value="$PROJECT_DIR$/Client/src/test.java" />
         <option value="$PROJECT_DIR$/Client/src/PeerNode.java" />
       </list>
     </option>
@@ -158,11 +159,6 @@
             <path>
               <item name="Chord_DHT" type="b2602c69:ProjectViewProjectNode" />
               <item name="CHORD_DHT" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Chord_DHT" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CHORD_DHT" type="462c0819:PsiDirectoryNode" />
-              <item name="172.20.89.165" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Chord_DHT" type="b2602c69:ProjectViewProjectNode" />
@@ -191,7 +187,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552433189078" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552450579494" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="configurable.group.build" />
   </component>
@@ -213,7 +209,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.PeerMain">
+  <component name="RunManager" selected="Application.BootstrapMain">
     <configuration name="BootstrapMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="BootstrapMain" />
       <module name="server" />
@@ -272,8 +268,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.PeerMain" />
         <item itemvalue="Application.BootstrapMain" />
+        <item itemvalue="Application.PeerMain" />
         <item itemvalue="Application.test" />
         <item itemvalue="Application.PeerMain" />
       </list>
@@ -309,10 +305,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="537" y="0" width="903" height="900" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.46750525" weight="0.29384437" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.46750525" visible="true" weight="0.1988555" />
       <window_info id="Structure" order="1" sideWeight="0.5324948" side_tool="true" weight="0.29822335" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -415,10 +411,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="41" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/PeerLookUP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-973">
+          <caret line="465" column="11" selection-start-line="465" selection-start-column="11" selection-end-line="465" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="548">
-          <caret line="124" column="51" selection-start-line="124" selection-start-column="51" selection-end-line="124" selection-end-column="51" />
+        <state relative-caret-position="1223">
+          <caret line="367" column="46" lean-forward="true" selection-start-line="367" selection-start-column="46" selection-end-line="367" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#run#0;class#test#0" />
@@ -426,20 +443,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/PeerLookUP.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="144" column="22" selection-start-line="144" selection-start-column="15" selection-end-line="144" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/PeerNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="643" column="1" selection-start-line="643" selection-start-column="1" selection-end-line="643" selection-end-column="1" />
+        <state relative-caret-position="364">
+          <caret line="461" column="46" selection-start-line="461" selection-start-column="46" selection-end-line="461" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#18549#18550#0" expanded="true" />
+            <element signature="e#18608#18609#0" expanded="true" />
           </folding>
         </state>
       </provider>
