@@ -107,17 +107,17 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Download Started</find>
+      <find />
       <find>8880</find>
       <find>requestIP</find>
-      <find>Zone details</find>
+      <find />
       <find>mkdirs</find>
       <find>Case</find>
       <find>Peer</find>
       <find>make</find>
       <find>makeMessage</find>
-      <find>void makeMessage</find>
-      <find>private static PeerNeighbour predecessor;</find>
+      <find />
+      <find />
       <find>downloa</find>
       <find>peerNode.hash(</find>
       <find>read</find>
@@ -277,6 +277,16 @@
       <method>
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <module name="CHORD_DHT-master" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
