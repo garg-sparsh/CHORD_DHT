@@ -879,21 +879,35 @@ class PeerFileManager extends Thread {
      * method to read the file to be uploaded
      */
     private void readFile(boolean share) {
-        if(share) {
-            try {
-                file = new File(filePath);
-            } catch (Exception e){
-                file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
+
+            if (share) {
+                try {
+                    boolean numeric = true;
+                    numeric = filePath.matches("\\d+(\\.\\d+)?");
+                    if (numeric || filePath.contains("/")) {
+                        file = new File(filePath);
+                    }
+                    else {
+                        if (isFileAvailable(String.valueOf(peerNode.hash(filePath)))) {
+                            file = new File(String.valueOf(peerNode.hash(filePath)));
+                        }
+                        else {
+                            file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
+                        }
+                    }
+                }
+                catch (Exception e){
+                    System.out.println("File is not available");
+                }
             }
-        }
-        else
-            file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
-        try {
-            fileInBytes = Files.readAllBytes(file.toPath());
+            else
+                file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
+            try {
+                fileInBytes = Files.readAllBytes(file.toPath());
 
-        } catch (IOException e) {
-
-        }
+            } catch (IOException e) {
+                System.out.println("Exception occured");
+            }
     }
     /**
      * method to make packets for the file to be sent
