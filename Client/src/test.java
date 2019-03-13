@@ -865,7 +865,7 @@ class PeerFileManager extends Thread {
         if(share)
             file = new File(filePath);
         else
-            file = new File("../../" + PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
+            file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
         try {
             fileInBytes = Files.readAllBytes(file.toPath());
 

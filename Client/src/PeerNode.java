@@ -41,7 +41,7 @@ public class PeerNode {
 	static PeerDetails peerDetails;
 	static PeerLookUpUpdate peerLookUpUpdate;
 	static PeerFileDownloadListener peerFileDownload;
-	static PeerTransmitterListener peerFileUpload;
+	static PeerTransmitterListener peerFileTransmitter;
 	static Boolean isEntryPoint = false;
 	static List<String> fileNames = new ArrayList<String>();
 
@@ -154,8 +154,8 @@ public class PeerNode {
 		peerLookUpUpdate.start();
 		peerFileDownload = new PeerFileDownloadListener();
 		peerFileDownload.start();
-		peerFileUpload = new PeerTransmitterListener();
-		peerFileUpload.start();
+		peerFileTransmitter = new PeerTransmitterListener();
+		peerFileTransmitter.run();
 	}
 
 	public void run() {
@@ -420,7 +420,7 @@ public class PeerNode {
 		peerNeighbourUpdate.stopServer();
 		peerDetails.stopServer();
 		peerLookUpUpdate.stopServer();
-		peerFileUpload.stopServer();
+		peerFileTransmitter.stopServer();
 		peerFileDownload.stopServer();
 	}
 
