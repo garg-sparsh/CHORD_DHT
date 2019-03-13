@@ -395,7 +395,9 @@ class PeerZoneManager extends Thread {
 
             for(String fileName : peerNode.fileNames)
             {
+                System.out.println("FILE:"+fileName);
                 if(!peerNode.isInMyZone(peerNode.hash(fileName))) {
+                    System.out.println("FILE In ZONE:"+fileName);
                     fileManager.uploadFile_new_peer(fileName, true);
                     deleteList.add(fileName);
                 }
@@ -877,8 +879,13 @@ class PeerFileManager extends Thread {
      * method to read the file to be uploaded
      */
     private void readFile(boolean share) {
-        if(share)
-            file = new File(filePath);
+        if(share) {
+            try {
+                file = new File(filePath);
+            } catch (Exception e){
+                file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
+            }
+        }
         else
             file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
         try {

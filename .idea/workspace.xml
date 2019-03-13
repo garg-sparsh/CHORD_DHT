@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a9d0bd3-5ca2-4675-88cb-fabef8197a2a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/PeerNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/PeerNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/test.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -15,10 +15,23 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Client/src/PeerNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3362">
+              <caret line="436" column="35" lean-forward="true" selection-start-line="436" selection-start-column="35" selection-end-line="436" selection-end-column="35" />
+              <folding>
+                <element signature="e#18479#18480#0" expanded="true" />
+                <element signature="e#18561#18562#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="878" column="17" selection-start-line="878" selection-start-column="17" selection-end-line="878" selection-end-column="17" />
+            <state relative-caret-position="368">
+              <caret line="886" column="13" lean-forward="true" selection-start-line="886" selection-start-column="13" selection-end-line="886" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -28,6 +41,9 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>share</find>
+      <find>message is</find>
+      <find>9991</find>
+      <find>upload</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -36,6 +52,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/Client/src/PeerNode.java" />
         <option value="$PROJECT_DIR$/Client/src/test.java" />
       </list>
     </option>
@@ -115,8 +132,19 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Client/src/test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="878" column="17" selection-start-line="878" selection-start-column="17" selection-end-line="878" selection-end-column="17" />
+        <state relative-caret-position="368">
+          <caret line="886" column="13" lean-forward="true" selection-start-line="886" selection-start-column="13" selection-end-line="886" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/PeerNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3362">
+          <caret line="436" column="35" lean-forward="true" selection-start-line="436" selection-start-column="35" selection-end-line="436" selection-end-column="35" />
+          <folding>
+            <element signature="e#18479#18480#0" expanded="true" />
+            <element signature="e#18561#18562#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

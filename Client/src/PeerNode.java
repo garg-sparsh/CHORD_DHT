@@ -434,7 +434,7 @@ public class PeerNode {
 
 		for(String fileName : PeerNode.fileNames)
 		{
-			fileManager.uploadFile(fileName, true);
+			fileManager.uploadFile_new_peer(fileName, true);
 		}
 	}
 
