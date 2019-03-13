@@ -7,12 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- *
- * The class is checks whether the requested zone number from a peer
- * is this peer's zone number. The class is a thread which can
- * support multiple clients at a given point.
- */
 public class KeySpace extends Thread {
 
     private static final int messageSize = 64;
@@ -67,14 +61,6 @@ public class KeySpace extends Thread {
         }
         isServerRunning = false;
     }
-
-    /**
-     *
-     * The class is a supporter class for checkKeySpace. The class gives response
-     * to the peer by checking its zone.
-     *
-     *
-     */
 
     private class KeySpaceHandler extends Thread {
 
@@ -190,12 +176,6 @@ class NodeDesc extends Thread {
         isServerRunning = false;
     }
 
-    /**
-     *
-     * The class is a supporter class for NodeDesc. The class gives response
-     * to the peer by giving details of this peer
-     *
-     */
     private class NodeDescHandler extends Thread {
 
         Socket socket;
@@ -304,10 +284,7 @@ class KeySpaceManager extends Thread {
         }
         isServerRunning = false;
     }
-    /**
-     * method to handle accepted thread of above class
-     *
-     */
+
     private class KeySpaceManagerHandler extends Thread {
         //data member of the class
         Socket socket;
@@ -327,9 +304,7 @@ class KeySpaceManager extends Thread {
             clientIP = clientIP.substring(1, clientIP.length());
 
         }
-        /**
-         * method to handle the thread of the class
-         */
+
         public void run() {
             try {
 
@@ -360,9 +335,7 @@ class KeySpaceManager extends Thread {
                 e.printStackTrace();
             }
         }
-        /**
-         * method  to send the file to new peer
-         */
+
         private void shareFilesToNewPeer() {
             System.out.println("Files are going to shared with new peer!!!!!!");
             NodeKeyManager fileManager = new NodeKeyManager();
@@ -382,11 +355,7 @@ class KeySpaceManager extends Thread {
             chordNode.fileNames.removeAll(deleteList);
 
         }
-        /**
-         * method to initiate for node leave
-         * @param dataOutputStream
-         * @throws IOException
-         */
+
         private void leave(DataOutputStream dataOutputStream) throws IOException {
 
             String NodeDesc[] = chordNode.getNodeDesc(clientIP);
@@ -444,12 +413,8 @@ class KeySpaceManager extends Thread {
             dataOutputStream.close();
 
         }
-        /**
-         * method to send the update information to bootstrap regarding new entry point
-         * @throws UnknownHostException
-         * @throws IOException
-         */
-        private void sendToChordMain() throws UnknownHostException, IOException {
+
+        private void sendToChordMain() throws IOException {
             Socket entrySocket = new Socket(  ChordPeerMain.serverIP, 8881 );
             DataOutputStream entryOutputStream = new DataOutputStream(entrySocket.getOutputStream());
 
@@ -459,11 +424,7 @@ class KeySpaceManager extends Thread {
             entryOutputStream.flush();
             entrySocket.close();
         }
-        /**
-         * method to initiate node join in chord
-         * @param dataOutputStream
-         * @throws IOException
-         */
+
         private void add(DataOutputStream dataOutputStream) throws IOException {
             int midPoint = ChordNode.getNodeStart() + ((ChordNode.getNodeEnd() - ChordNode.getNodeStart()) / 2);
 
@@ -567,11 +528,7 @@ class FileDownloadListener extends Thread {
         }
         isServerRunning = false;
     }
-    /**
-     * class to handle the accepted threads of the server
-     * Srinath Kanna, Krishna Prasad and Ajeeth Kannan
-     *
-     */
+
     private class FileDownloadHandler extends Thread {
         //data members of the class
         Socket socket;
@@ -623,12 +580,7 @@ class FileDownloadListener extends Thread {
             }
 
         }
-        /**
-         * method to write the file
-         * @param filepath-name of the file
-         * @param totalPackets-total number of packets in file
-         * @throws IOException
-         */
+
         private void fileWrite(String filepath,int totalPackets) throws IOException
         {
             File file = new File(ChordNode.getMyIP());
@@ -645,11 +597,7 @@ class FileDownloadListener extends Thread {
             fos.close();
 
         }
-        /**
-         * method to extract packets in file as an array
-         * @param fileArray-file as packet array
-         * @return-file as a single array
-         */
+
         private byte[] extractFileContents(byte[][] fileArray) {
             List<byte[]> data = new ArrayList<>();
 
@@ -705,13 +653,6 @@ class NodeKeyManager extends Thread {
 
     }
 
-    /**
-     * method to upload the file to the chord
-     * @param path-filepath of the file
-     * @param share-false to upload a file
-     * 			    true to share the file to its peer white join and leave
-     */
-
     public void uploadFile(String path, boolean share) {
         filePath = path;
         if(isFileAvailable(path)){
@@ -755,11 +696,7 @@ class NodeKeyManager extends Thread {
             return true;
         return false;
     }
-    /**
-     * method to download a file from chord
-     * @param filePath-name of the file to be downloaded
-     * @throws IOException
-     */
+
     public void downloadFile(String filePath) throws IOException {
         System.out.println("Download request formed for file :" + filePath);
 //        filePath = "../"+ChordNode.getMyIP()+filePath;
@@ -812,9 +749,6 @@ class NodeKeyManager extends Thread {
         }
     }
 
-    /**
-     * method to send the packets to upload
-     */
     private void packetsToSend() {
         try {
             Socket socket = new Socket(sendToIP, sendPortTo);
@@ -837,9 +771,7 @@ class NodeKeyManager extends Thread {
             e.printStackTrace();
         }
     }
-    /**
-     * method to read the file to be uploaded
-     */
+
     private void readFile(boolean share) {
 
             if (share) {
@@ -871,9 +803,7 @@ class NodeKeyManager extends Thread {
                 System.out.println("Exception occured");
             }
     }
-    /**
-     * method to make packets for the file to be sent
-     */
+
     private void packetsToCreate() {
 
         fileSize = file.length();

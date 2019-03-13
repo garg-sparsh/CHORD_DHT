@@ -1,4 +1,3 @@
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,12 +7,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Random;
 
-/**
- *
- * The class ChordListener listens for peers that need to join
- * into the chord network. The class is a thread which listens for
- * multiple clients at a given point.
- */
 public class ChordListener extends Thread {
 	
 	private static final int messageSize = 64;
@@ -56,15 +49,6 @@ public class ChordListener extends Thread {
 		}
 	}
 
-	/**
-	 *
-	 * The class is a supporting class for ChordListener. It responds
-	 * to the peers that needs to join into the chord network. The class
-	 * responds back with a random zone number and an entrypoint IP. If the
-	 * peer is the first peer to the network, the Chord makes the peer
-	 * as the entry point.
-	 *
-	 */
 	private class ChordHandler extends Thread {
 
 		Socket socket;
@@ -90,6 +74,7 @@ public class ChordListener extends Thread {
 				zonePos = random.nextInt(ChordMain.getN() - 2) + 1;
 				
 				if( chordIP.equals("") ) {
+
 					makeMessage(zonePos + " " + "isEntryPoint", messagePos);
 					chordIP = socket.getInetAddress().toString();
 					chordIP = chordIP.substring(1, chordIP.length());
@@ -123,12 +108,6 @@ public class ChordListener extends Thread {
 		
 	}
 
-	/**
-	 *
-	 * Entry point of the chord is assigned
-	 *
-	 * @param ip IP to set as entry point
-     */
 	public static void setChordIP( String ip ) {
 		chordIP = ip;
 	}
@@ -175,12 +154,6 @@ class ChordEntryListener extends Thread {
 		}
 	}
 
-	/**
-	 *
-	 * The class is a supporting class for ChordEntryListener. It responds
-	 * to the peers that sends its IP as entry point.
-	 *
-	 */
 	private class ChordEntryHandler extends Thread {
 
 		Socket socket;

@@ -78,7 +78,6 @@ public class NodeFT {
 					String message[] = chordNode.getNodeDesc(peerIP);
 					
 					String zone[] = message[0].split(" ");
-					int srtZone = Integer.parseInt(zone[0]);
 					int endZone = Integer.parseInt(zone[1]);
 					
 					if( zoneUpdating != endZone ) {
@@ -94,9 +93,7 @@ public class NodeFT {
 							if( times < 0 ) {
 								break;
 							}
-							
 						}
-						
 					}
 					
 					if( times < 0 ) {
@@ -117,7 +114,6 @@ public class NodeFT {
 					} catch (IOException e) {
 						e.printStackTrace();
 					} 
-					
 				}
 				
 				zoneUpdating++;
@@ -128,10 +124,7 @@ public class NodeFT {
 				times--;
 				
 			}
-			
 		}
-		
-		
 	}
 	
 	public void setFTIP( String ip, int i ) {
@@ -227,9 +220,6 @@ class NodeFTUpdate extends Thread {
 
 	}
 
-	/**
-	 * The class is a support class for NodeFTUpdate
-	 */
 	private class PeerLookUpUpdateHandler extends Thread {
 
 		Socket socket;
@@ -297,12 +287,6 @@ class Neighbour {
 
 	}
 
-	/**
-	 *
-	 * @param ip neighbor IP
-	 * @param zoneSrt start zone of the neighbor
-	 * @param zoneEnd end zone of the neighbor
-	 */
 	public void updateZone(String ip, int zoneSrt, int zoneEnd) {
 		this.ip = ip;
 		this.zoneSrt = zoneSrt;
@@ -565,9 +549,6 @@ class TransferListener extends Thread {
 			}
 		}
 
-		/**
-		 * method to read the file to be transmitted
-		 */
 		private void readFileToTransmit() {
 
 			file = new File(String.valueOf(ChordNode.getMyIP() + "/" + chordNode.hash(filePath)));
@@ -580,10 +561,6 @@ class TransferListener extends Thread {
 
 		}
 
-
-		/**
-		 * method to make file to be sent as packets
-		 */
 		private void packetsToCreate() {
 
 			fileSize = file.length();
@@ -595,18 +572,13 @@ class TransferListener extends Thread {
 			System.arraycopy(fileInBytes, (totalPackets - 1) * messageSize, fileInPackets[totalPackets - 1], 0, (int) fileSize - (totalPackets - 1) * 1024);
 
 		}
-
-
-
 	}
-
 }
 
 class MakeMessage{
 
 	public MakeMessage(){
-
-	}
+		}
 
 	public byte[] message_creation(byte[] sendData, int messageSize, String message){
 		Arrays.fill(sendData, 0, messageSize, (byte) 0);

@@ -4,18 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 
-/***
- * Class ChordNode is the main program for each peer which initiates
- * several listeners and transmitters needed to maintain zones in Chord.
- */
 public class ChordNode {
 
 	private static final int messageSize = 64;
@@ -60,46 +53,22 @@ public class ChordNode {
 		nodeEnd = end;
 	}
 
-	/**
-	 * GetPredecessor method returns the predecessor of this method.
-	 * @return Neighbour class object of the predecessor
-     */
 	public static Neighbour getPredecessor() {
 		return predecessor;
 	}
 
-	/**
-	 * GetSuccessor method returns the successor of this method.
-	 * @return Neighbour class object of the successor
-	 */
 	public static Neighbour getSuccessor() {
 		return successor;
 	}
 
-	/**
-	 * setPredecessor method sets this node's predecessor with the given Ip, zone start and zone end values.
-	 * @param predecessorIP
-	 * @param zoneSrt
-	 * @param zoneEnd
-     */
 	public static void setPredecessor(String predecessorIP, int zoneSrt, int zoneEnd) {
 		predecessor.updateZone(predecessorIP, zoneSrt, zoneEnd);
 	}
 
-	/***
-	 * setSuccessor method sets this node's successor with the given Ip, zone start and zone end values.
-	 * @param successorIP
-	 * @param zoneSrt
-	 * @param zoneEnd
-     */
 	public static void setSuccessor(String successorIP, int zoneSrt, int zoneEnd) {
 		successor.updateZone(successorIP, zoneSrt, zoneEnd);
 	}
 
-	/***
-	 * getMyIP returns this ChordNode's IP address
-	 * @return
-     */
 	public static String getMyIP() {
 		return myIP;
 	}
@@ -109,21 +78,10 @@ public class ChordNode {
 
 	}
 
-	/***
-	 * addFilesNames method adds the give file name to the list of files
-	 * stored at this node.
-	 * @param name
-     */
 	public void addFiles(String name) {
 		fileNames.add(name);
 	}
 
-
-	/***
-	 * Constructor for the ChordNode which takes a randomNumber and an entryPoint value
-	 * @param randomNumber
-	 * @param entryPoint
-     */
 	public ChordNode(int randomNumber, String entryPoint, String currentIP) {
 		System.out.println("Node number and IP: "+ randomNumber + " " + currentIP + "\n");
 		myIP = currentIP;
@@ -169,55 +127,59 @@ public class ChordNode {
 			//Print options menu on command line
 			printOptionsMenu();
 
+			try{
+				int switchInt = scanner.nextInt();
+				switch (switchInt) {
 
-			int switchInt = scanner.nextInt();
+					case 1://Print node details including the list of finger tables
+						getDetails();
+						break;
+					case 2://Option to leave chord zone
+						if (myIP.equals(predecessor.getIP()) && myIP.equals(successor.getIP())) {
+							System.out.println("You are the only peer.");
+							System.out.println("At least one peer needed to maintain the chord!!!");
+							break;
+						}
+						if (!leaveChord()) {
+							System.out.println("Leave Zone failed. Try again.");
+						} else {
+							System.out.println("Leave Zone success. Node shutdown complete.");
+							isNodeRunning = false;
+						}
+						break;
+					case 3://Option to upload file to chord zone
+						System.out.println("Enter the file name to upload: ");
+						scanner = new Scanner(System.in);
+						filePath = scanner.nextLine();
+						NodeKeyManager peerFileUpload = new NodeKeyManager();
+						peerFileUpload.uploadFile(filePath, false);
+						break;
+					case 4://Option to download file from chord zone
+						System.out.print("Enter the file name for download: ");
+						scanner = new Scanner(System.in);
+						filePath = scanner.nextLine();
+						filePath = new File(filePath).getName();
+						NodeKeyManager nodeFileDownload = new NodeKeyManager();
+						try {
+							nodeFileDownload.downloadFile(filePath);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						break;
+					case 5://Print the list of files stored at this peer.
+						System.out.println("Files stored at this Peer :");
+						System.out.println(fileNames);
+						break;
 
-			switch (switchInt) {
+					default:
+						System.out.println("Enter the correct number");
 
-			case 1://Print node details including the list of finger tables
-				getDetails();
-				break;
-			case 2://Option to leave chord zone
-				if (myIP.equals(predecessor.getIP()) && myIP.equals(successor.getIP())) {
-					System.out.println("You are the only peer.");
-					System.out.println("At least one peer needed to maintain the chord!!!");
-					break;
 				}
-				if (!leaveChord()) {
-					System.out.println("Leave Zone failed. Try again.");
-				} else {
-					System.out.println("Leave Zone success. Node shutdown complete.");
-					isNodeRunning = false;
-				}
-				break;
-			case 3://Option to upload file to chord zone
-				System.out.println("Enter the file name to upload");
-				scanner = new Scanner(System.in);
-				filePath = scanner.nextLine();
-				NodeKeyManager peerFileUpload = new NodeKeyManager();
-				peerFileUpload.uploadFile(filePath, false);
-				break;
-			case 4://Option to download file from chord zone
-				System.out.print("Enter the file name for download");
-				scanner = new Scanner(System.in);
-				filePath = scanner.nextLine();
-				filePath = new File(filePath).getName();
-				NodeKeyManager nodeFileDownload = new NodeKeyManager();
-				try {
-					nodeFileDownload.downloadFile(filePath);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
-			case 5://Print the list of files stored at this peer.
-				System.out.println("Files stored at this Peer :");
-				System.out.println(fileNames);
-				break;
-
-			default:
-				System.out.println("Enter the correct number");
-
+			}
+			catch (InputMismatchException ime){
+				System.out.println("Invalid input");
+				printOptionsMenu();
 			}
 
 		}
@@ -226,9 +188,6 @@ public class ChordNode {
 
 	}
 
-	/**
-	 * Prints command line options for user input
-	 */
 	public static void printOptionsMenu()
 	{
 		System.out.println("Choose an option:");
@@ -241,9 +200,6 @@ public class ChordNode {
 		System.out.print("Your input - ");
 	}
 
-	/**
-	 * getDetails method prints the node details with list of finger tables maintained.
-	 */
 	private void getDetails() {
 
 		int totalIter = ChordPeerMain.n;
@@ -319,33 +275,17 @@ public class ChordNode {
 
 	}
 
-	/**
-	 * isFileOwner method check if this node contains the given file name
-	 * @param fileName
-	 * @return
-     */
 	public boolean isFileOwner(String fileName) {
 		return fileNames.contains(fileName);
 	}
 
-	/***
-	 * keySpaceRequest method takes a randomNumber and requestIP as input and based
-	 * on the IP found for the zone, a request is placed to that particular zone owner.
-	 * @param randomNumber
-	 * @param requestIP
-     */
 	private void keySpaceRequest(int randomNumber, String requestIP) {
 
 		requestIP = getKeySpaceIP(randomNumber, requestIP);
-		getKeySpace(randomNumber, requestIP);
+		getKeySpace(requestIP);
 
 	}
 
-	/**
-	 * hash method generates the hash of the file name that is supplied.
-	 * @param fileName
-	 * @return
-     */
 	public int hash(String fileName) {
 		byte[] filePathBytes = fileName.getBytes();
 		Checksum value = new CRC32();
@@ -356,12 +296,6 @@ public class ChordNode {
 		return hash;
 	}
 
-	/**
-	 * leaveChord method takes care of all the updates it needs to do before this
-	 * node leaves the zone.
-	 * @return a boolean value if the request for leaving the zone has been confirmed
-	 * by the concerned peer.
-     */
 	private boolean leaveChord() {
 
 		Socket socket;
@@ -377,7 +311,8 @@ public class ChordNode {
 			DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
 			DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-			makeMessage("leave");
+			MakeMessage makeMessage = new MakeMessage();
+			sendData = makeMessage.message_creation(sendData, messageSize, "leave");
 
 			dataOutputStream.write(sendData);
 			dataOutputStream.flush();
@@ -407,10 +342,6 @@ public class ChordNode {
 		return false;
 	}
 
-	/**
-	 * stopAllNodeListeners method takes care of stopping all
-	 * the servers at this peer node.
-	 */
 	private void stopAllNodeListeners() {
 
 		checkKeySpace.stopServer();
@@ -422,10 +353,6 @@ public class ChordNode {
 		nodeFileDownload.stopServer();
 	}
 
-	/***
-	 * shareFilesToNeighbours method takes care of sending the files
-	 * present at this node to their respective zone owners.
-	 */
 	private void shareFilesToNeighbours() {
 		ChordNode.setMyEndpoint(-1, -1);
 		NodeKeyManager fileManager = new NodeKeyManager();
@@ -436,15 +363,7 @@ public class ChordNode {
 		}
 	}
 
-	/***
-	 * getKeySpace method places the request to get into the zone owner by
-	 * a peer. Once confirmed by the peer, this node is instantiated with
-	 * the neccessary details.
-	 *
-	 * @param randomNumber
-	 * @param requestIP
-     */
-	private void getKeySpace(int randomNumber, String requestIP) {
+	private void getKeySpace(String requestIP) {
 
 		try {
 
@@ -453,7 +372,9 @@ public class ChordNode {
 			DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
 			DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-			makeMessage("add");
+			MakeMessage makeMessage = new MakeMessage();
+			sendData = makeMessage.message_creation(sendData, messageSize, "add");
+
 			dataOutputStream.write(sendData);
 			dataOutputStream.flush();
 
@@ -484,31 +405,6 @@ public class ChordNode {
 		}
 	}
 
-	/***
-	 * makeMessage constructs any message before it is sent
-	 * across the zone.
-	 * @param message
-     */
-	private void makeMessage(String message) {
-
-		Arrays.fill(sendData, 0, messageSize, (byte) 0);
-		byte messageByte[] = message.getBytes();
-		ByteBuffer byteBuffer = ByteBuffer.wrap(sendData);
-		byteBuffer.position(0);
-		byteBuffer.put(messageByte);
-		sendData = byteBuffer.array();
-
-	}
-
-
-
-	/**
-	 * getKeySpaceIP method is common class used by several components to retrieve IP address for
-	 * a given zone number.
-	 * @param zoneNumber
-	 * @param requestIP
-     * @return
-     */
 	public String getKeySpaceIP(int zoneNumber, String requestIP) {
 
 
@@ -522,8 +418,9 @@ public class ChordNode {
 
 				DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
 				DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+				MakeMessage makeMessage = new MakeMessage();
+				sendData = makeMessage.message_creation(sendData, messageSize, zoneNumber + "");
 
-				makeMessage(zoneNumber + "");
 				dataOutputStream.write(sendData);
 				dataOutputStream.flush();
 
@@ -548,12 +445,6 @@ public class ChordNode {
 
 	}
 
-	/**
-	 * sendNeighbourUpdate method sends an update to the corresponding
-	 * neighbour based on the parameter value.
-	 * @param IP
-	 * @param value
-     */
 	public void sendNeighbourUpdate(String IP, int value) {
 
 		try {
@@ -563,9 +454,11 @@ public class ChordNode {
 			DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
 			if (value == 0) {
-				makeMessage("predecessor" + " " + nodeStart + " " + nodeEnd);
+				MakeMessage makeMessage = new MakeMessage();
+				sendData = makeMessage.message_creation(sendData, messageSize, "predecessor" + " " + nodeStart + " " + nodeEnd);
 			} else {
-				makeMessage("successor" + " " + nodeStart + " " + nodeEnd);
+				MakeMessage makeMessage = new MakeMessage();
+				sendData = makeMessage.message_creation(sendData, messageSize, "successor" + " " + nodeStart + " " + nodeEnd);
 			}
 
 			dataOutputStream.write(sendData);
@@ -579,12 +472,6 @@ public class ChordNode {
 
 	}
 
-	/**
-	 * getNodeDesc method retrieves a peer's details when an IP address
-	 * is supplied.
-	 * @param IP
-	 * @return
-     */
 	public String[] getNodeDesc(String IP) {
 
 		String message[] = null;
@@ -609,12 +496,6 @@ public class ChordNode {
 
 	}
 
-	/**
-	 * nearestNode method returns the closest peer for
-	 * a particular zone that's given.
-	 * @param zone
-	 * @return
-     */
 	public String nearestNode(int zone) {
 
 		int nearestZone = nodeEnd + ChordNode.NodeFT.getZone(0);
@@ -647,11 +528,6 @@ public class ChordNode {
 
 	}
 
-	/**
-	 * isInMyKeySpace method checks whether the given zone is in this peer node's range.
-	 * @param zone
-	 * @return
-     */
 	public boolean isInMyKeySpace(int zone)
 	{
 		return (zone <= ChordNode.getNodeEnd() && zone >= ChordNode.getNodeStart());

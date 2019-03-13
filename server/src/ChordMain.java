@@ -1,11 +1,6 @@
 
 import java.io.IOException;
 
-/**
- *
- * The class ChordMain is the main class for Bootstrap
- *
- */
 public class ChordMain
 {
 	
