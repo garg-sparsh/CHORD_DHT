@@ -155,7 +155,7 @@ public class PeerNode {
 		peerFileDownload = new PeerFileDownloadListener();
 		peerFileDownload.start();
 		peerFileTransmitter = new PeerTransmitterListener();
-		peerFileTransmitter.run();
+		peerFileTransmitter.start();
 	}
 
 	public void run() {
