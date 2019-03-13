@@ -396,7 +396,7 @@ class PeerZoneManager extends Thread {
             for(String fileName : peerNode.fileNames)
             {
                 if(!peerNode.isInMyZone(peerNode.hash(fileName))) {
-                    fileManager.uploadFile(fileName, true);
+                    fileManager.uploadFile_new_peer(fileName, true);
                     deleteList.add(fileName);
                 }
 
@@ -747,6 +747,7 @@ class PeerFileManager extends Thread {
      * @param share-false to upload a file
      * 			    true to share the file to its peer white join and leave
      */
+
     public void uploadFile(String path, boolean share) {
         filePath = path;
         if(isFileAvailable(path)){
@@ -768,6 +769,20 @@ class PeerFileManager extends Thread {
             PeerNode.printOptionsMenu();
         }
 
+    }
+
+    public void uploadFile_new_peer(String path, boolean share) {
+        filePath = path;
+        sendZoneTo = peerNode.hash(filePath);
+        System.out.println("File sending to zone :" + sendZoneTo);
+        if(!share)
+            readFile(!share);
+        else
+            readFile(share);
+        sendToIP = peerNode.getZoneIP(sendZoneTo, peerNode.nearestPeer(sendZoneTo));
+        makePackets();
+        sendPackets();
+        System.out.println("Upload complete!");
     }
 
     public boolean isFileAvailable(String path){
