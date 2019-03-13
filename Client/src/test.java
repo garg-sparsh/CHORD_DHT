@@ -758,7 +758,9 @@ class PeerFileManager extends Thread {
     public void uploadFile(String path, boolean share) {
         filePath = path;
         if(isFileAvailable(path)){
-            sendZoneTo = peerNode.hash(filePath);
+            String arr[] = path.split("/");
+            String filePath_name = arr[arr.length-1];
+            sendZoneTo = peerNode.hash(filePath_name);
             System.out.println("File sending to zone :" + sendZoneTo);
             if(!share)
                 readFile(!share);
@@ -788,7 +790,7 @@ class PeerFileManager extends Thread {
      */
     public void downloadFile(String filePath) throws IOException {
         System.out.println("Download request formed for file :" + filePath);
-
+//        filePath = "../"+PeerNode.getMyIP()+filePath;
         recvZoneFrom = peerNode.hash(filePath);
         System.out.println("Requesting file from zone: " + recvZoneFrom);
         recvIPFrom = peerNode.getZoneIP(recvZoneFrom, peerNode.nearestPeer(recvZoneFrom));
@@ -864,7 +866,7 @@ class PeerFileManager extends Thread {
         if(share)
             file = new File(filePath);
         else
-            file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
+            file = new File("../../" + PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
         try {
             fileInBytes = Files.readAllBytes(file.toPath());
 

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d039df7-92ac-4a40-8478-9a355b0b684f" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/PeerLookUP.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/PeerLookUP.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/test.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,7 +20,7 @@
         <entry file="file://$PROJECT_DIR$/Client/src/PeerNode.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="177">
-              <caret line="238" column="23" selection-start-line="238" selection-start-column="23" selection-end-line="238" selection-end-column="23" />
+              <caret line="393" column="32" selection-start-line="393" selection-start-column="32" selection-end-line="393" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1541#1542#0" expanded="true" />
@@ -36,20 +36,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PeerLookUP.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="PeerLookUP.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Client/src/PeerLookUP.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2051">
-              <caret line="654" column="1" selection-start-line="654" selection-start-column="1" selection-end-line="654" selection-end-column="1" />
+            <state relative-caret-position="122">
+              <caret line="587" selection-start-line="587" selection-end-line="587" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="test.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="13957">
-              <caret line="829" column="39" selection-start-line="829" selection-start-column="39" selection-end-line="829" selection-end-column="39" />
+            <state relative-caret-position="131">
+              <caret line="765" column="24" selection-start-line="765" selection-start-column="16" selection-end-line="765" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -57,8 +57,8 @@
       <file leaf-file-name="sample.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/sample.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="9" lean-forward="true" selection-start-line="5" selection-start-column="8" selection-end-line="8" selection-end-column="9" />
+            <state relative-caret-position="150">
+              <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -66,7 +66,7 @@
       <file leaf-file-name="PeerMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/PeerMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
+            <state relative-caret-position="570">
               <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
             </state>
           </provider>
@@ -96,6 +96,15 @@
       <find>makeMessage</find>
       <find>void makeMessage</find>
       <find>private static PeerNeighbour predecessor;</find>
+      <find>downloa</find>
+      <find>peerNode.hash(</find>
+      <find>read</find>
+      <find>readfil</find>
+      <find>split</find>
+      <find>arr</find>
+      <find>arr[</find>
+      <find>readFile</find>
+      <find>readfilet</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -133,10 +142,10 @@
         <option value="$PROJECT_DIR$/Client/src/PeerNeighbourUpdate.java" />
         <option value="$PROJECT_DIR$/Client/src/PeerTransmitterListener.java" />
         <option value="$PROJECT_DIR$/Client/src/PeerNode.java" />
-        <option value="$PROJECT_DIR$/Client/src/PeerLookUP.java" />
         <option value="$PROJECT_DIR$/Client/src/PeerMain.java" />
         <option value="$PROJECT_DIR$/Client/src/sample.java" />
         <option value="$PROJECT_DIR$/Client/src/test.java" />
+        <option value="$PROJECT_DIR$/Client/src/PeerLookUP.java" />
       </list>
     </option>
   </component>
@@ -159,6 +168,17 @@
             <path>
               <item name="CHORD_DHT-master" type="b2602c69:ProjectViewProjectNode" />
               <item name="CHORD_DHT-master" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CHORD_DHT-master" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CHORD_DHT-master" type="462c0819:PsiDirectoryNode" />
+              <item name="Client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CHORD_DHT-master" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CHORD_DHT-master" type="462c0819:PsiDirectoryNode" />
+              <item name="Client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -188,7 +208,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.sample">
+  <component name="RunManager" selected="Application.PeerMain">
     <configuration name="BootstrapMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="BootstrapMain" />
       <module name="server" />
@@ -197,7 +217,7 @@
     <configuration name="PeerMain" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="PeerMain" />
       <module name="Client" />
-      <option name="PROGRAM_PARAMETERS" value="129.210.16.94" />
+      <option name="PROGRAM_PARAMETERS" value="172.21.87.67" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     </configuration>
     <configuration name="PeerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -317,8 +337,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1278" height="900" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="0" width="714" height="900" extended-state="6" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32917705" />
@@ -328,14 +347,14 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5007153" side_tool="true" weight="0.28553617" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" visible="true" weight="0.20448878" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" weight="0.457606" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.4114713" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.4114713" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.47021943" visible="true" weight="0.32281554" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.47033897" visible="true" weight="0.096726194" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32917705" />
-      <window_info id="Structure" order="1" sideWeight="0.52978057" side_tool="true" visible="true" weight="0.32281554" />
+      <window_info id="Structure" order="1" sideWeight="0.529661" side_tool="true" visible="true" weight="0.096726194" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
@@ -702,31 +721,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/PeerLookUP.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2051">
-          <caret line="654" column="1" selection-start-line="654" selection-start-column="1" selection-end-line="654" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/sample.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="9" lean-forward="true" selection-start-line="5" selection-start-column="8" selection-end-line="8" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/PeerMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
+        <state relative-caret-position="150">
+          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/PeerNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="177">
-          <caret line="238" column="23" selection-start-line="238" selection-start-column="23" selection-end-line="238" selection-end-column="23" />
+          <caret line="393" column="32" selection-start-line="393" selection-start-column="32" selection-end-line="393" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1541#1542#0" expanded="true" />
@@ -741,10 +746,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/PeerMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13957">
-          <caret line="829" column="39" selection-start-line="829" selection-start-column="39" selection-end-line="829" selection-end-column="39" />
+        <state relative-caret-position="131">
+          <caret line="765" column="24" selection-start-line="765" selection-start-column="16" selection-end-line="765" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/PeerLookUP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="587" selection-start-line="587" selection-end-line="587" />
         </state>
       </provider>
     </entry>

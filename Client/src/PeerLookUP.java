@@ -583,7 +583,7 @@ class PeerTransmitterListener extends Thread {
 		 */
 		private void readFileToTransmit() {
 
-			file = new File(String.valueOf(PeerNode.getMyIP() + "/" + peerNode.hash(filePath)));
+			file = new File(String.valueOf("../../" + PeerNode.getMyIP() + "/" + peerNode.hash(filePath)));
 			try {
 				fileInBytes = Files.readAllBytes(file.toPath());
 			} catch (IOException e) {
