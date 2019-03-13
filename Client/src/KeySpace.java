@@ -13,18 +13,18 @@ import java.util.List;
  * is this peer's zone number. The class is a thread which can
  * support multiple clients at a given point.
  */
-public class test extends Thread {
+public class KeySpace extends Thread {
 
     private static final int messageSize = 64;
 
     private ServerSocket serverSocket;
 
-    PeerNode peerNode = new PeerNode();
+    ChordNode chordNode = new ChordNode();
     private boolean isServerRunning;
     Socket socket;
 
     // constructor
-    public test() {
+    public KeySpace() {
 
         try {
             serverSocket = new ServerSocket(9990);
@@ -44,7 +44,7 @@ public class test extends Thread {
 
                 socket = serverSocket.accept();
 
-                new PeerZoneCheckHandler(socket).start();
+                new KeySpaceHandler(socket).start();
 
             } catch (IOException e) {
 
@@ -70,13 +70,13 @@ public class test extends Thread {
 
     /**
      *
-     * The class is a supporter class for PeerCheckZone. The class gives response
+     * The class is a supporter class for checkKeySpace. The class gives response
      * to the peer by checking its zone.
      *
      *
      */
 
-    private class PeerZoneCheckHandler extends Thread {
+    private class KeySpaceHandler extends Thread {
 
         Socket socket;
 
@@ -84,7 +84,7 @@ public class test extends Thread {
         byte recvData[] = new byte[messageSize];
 
         // constructor
-        public PeerZoneCheckHandler(Socket socket) {
+        public KeySpaceHandler(Socket socket) {
 
             this.socket = socket;
 
@@ -105,9 +105,9 @@ public class test extends Thread {
                 int zoneQuery = Integer.parseInt( new String( recvData ).trim() );
                 System.out.println("zoneQuery:"+zoneQuery);
 
-                System.out.println("PeerNode.getMyZoneSrt():"+PeerNode.getMyZoneSrt()+" "+PeerNode.getMyZoneEnd());
+                System.out.println("ChordNode.getNodeStart():"+ ChordNode.getNodeStart()+" "+ ChordNode.getNodeEnd());
 
-                if( zoneQuery >= PeerNode.getMyZoneSrt() && zoneQuery <= PeerNode.getMyZoneEnd() ) {
+                if( zoneQuery >= ChordNode.getNodeStart() && zoneQuery <= ChordNode.getNodeEnd() ) {
                     MakeMessage makeMessage = new MakeMessage();
                     sendData = makeMessage.message_creation(sendData, messageSize, "isMyZone", messagePos);
                     dataOutputStream.write(sendData);
@@ -117,12 +117,12 @@ public class test extends Thread {
 
                     String nearestIP;
 
-                    if( zoneQuery >= PeerNode.getPredecessor().getZoneSrt() &&
-                            zoneQuery <= PeerNode.getPredecessor().getZoneEnd() ) {
-                        nearestIP = PeerNode.getPredecessor().getIP();
+                    if( zoneQuery >= ChordNode.getPredecessor().getNodeStart() &&
+                            zoneQuery <= ChordNode.getPredecessor().getNodeEnd() ) {
+                        nearestIP = ChordNode.getPredecessor().getIP();
                     }
                     else {
-                        nearestIP = peerNode.nearestPeer(zoneQuery);
+                        nearestIP = chordNode.nearestNode(zoneQuery);
                     }
                     MakeMessage makeMessage = new MakeMessage();
                     sendData = makeMessage.message_creation(sendData, messageSize, nearestIP, messagePos);
@@ -137,23 +137,12 @@ public class test extends Thread {
 
         }
 
-        // wraps message into the sendByte
-//        private void makeMessage(String message, int pos) {
-//
-//            Arrays.fill(sendData, 0, messageSize, (byte) 0);
-//            byte messageByte[] = message.getBytes();
-//            ByteBuffer byteBuffer = ByteBuffer.wrap(sendData);
-//            byteBuffer.position(pos);
-//            byteBuffer.put(messageByte);
-//            sendData = byteBuffer.array();
-//
-//        }
 
     }
 
 }
 
-class PeerDetails extends Thread {
+class NodeDesc extends Thread {
 
     private static final int messageSize = 1024;
 
@@ -162,7 +151,7 @@ class PeerDetails extends Thread {
     Socket socket;
 
     // constructor
-    public PeerDetails() {
+    public NodeDesc() {
 
         try {
             isServerRunning = true;
@@ -182,7 +171,7 @@ class PeerDetails extends Thread {
 
                 socket = serverSocket.accept();
 
-                new PeerDetailsHandler(socket).start();
+                new NodeDescHandler(socket).start();
 
             } catch (IOException e) {
 
@@ -206,11 +195,11 @@ class PeerDetails extends Thread {
 
     /**
      *
-     * The class is a supporter class for PeerDetails. The class gives response
+     * The class is a supporter class for NodeDesc. The class gives response
      * to the peer by giving details of this peer
      *
      */
-    private class PeerDetailsHandler extends Thread {
+    private class NodeDescHandler extends Thread {
 
         Socket socket;
 
@@ -219,7 +208,7 @@ class PeerDetails extends Thread {
         byte sendData[] = new byte[messageSize];
 
         // // constructor
-        public PeerDetailsHandler(Socket socket) {
+        public NodeDescHandler(Socket socket) {
 
             this.socket = socket;
             clientIP = socket.getInetAddress().toString();
@@ -233,19 +222,19 @@ class PeerDetails extends Thread {
 
                 DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-                String message1 = PeerNode.getMyZoneSrt() + " " + PeerNode.getMyZoneEnd() + "\n";
-                String message2 = PeerNode.getPredecessor().getIP() + " " + PeerNode.getPredecessor().getZoneSrt() + " " +
-                        PeerNode.getPredecessor().getZoneEnd() + "\n";
-                String message3 = PeerNode.getSuccessor().getIP() + " " + PeerNode.getSuccessor().getZoneSrt() + " " +
-                        PeerNode.getSuccessor().getZoneEnd() + "\n";
+                String message1 = ChordNode.getNodeStart() + " " + ChordNode.getNodeEnd() + "\n";
+                String message2 = ChordNode.getPredecessor().getIP() + " " + ChordNode.getPredecessor().getNodeStart() + " " +
+                        ChordNode.getPredecessor().getNodeEnd() + "\n";
+                String message3 = ChordNode.getSuccessor().getIP() + " " + ChordNode.getSuccessor().getNodeStart() + " " +
+                        ChordNode.getSuccessor().getNodeEnd() + "\n";
                 String message4 = new String("");
-                String message5 = PeerNode.isEntryPoint.toString() + "\n";
+                String message5 = ChordNode.isEntryPoint.toString() + "\n";
 
-                for (int i = 0; i < PeerMain.m; i++) {
-                    if (i != PeerMain.m - 1) {
-                        message4 = message4 + PeerNode.peerLookUP.getPeerIP(i) + " ";
+                for (int i = 0; i < ChordPeerMain.m; i++) {
+                    if (i != ChordPeerMain.m - 1) {
+                        message4 = message4 + ChordNode.NodeFT.getPeerIP(i) + " ";
                     } else {
-                        message4 = message4 + PeerNode.peerLookUP.getPeerIP(i) + "\n";
+                        message4 = message4 + ChordNode.NodeFT.getPeerIP(i) + "\n";
                     }
                 }
                 MakeMessage makeMessage = new MakeMessage();
@@ -260,36 +249,25 @@ class PeerDetails extends Thread {
 
         }
 
-        // wraps message into the sendByte
-//        private void makeMessage(String message) {
-//
-//            Arrays.fill(sendData, 0, messageSize, (byte) 0);
-//            byte messageByte[] = message.getBytes();
-//            ByteBuffer byteBuffer = ByteBuffer.wrap(sendData);
-//            byteBuffer.position(0);
-//            byteBuffer.put(messageByte);
-//            sendData = byteBuffer.array();
-//
-//        }
 
     }
 
 }
 
-class PeerZoneManager extends Thread {
+class KeySpaceManager extends Thread {
     //data members of the class
     private static final int messageSize = 64;
 
     private ServerSocket serverSocket;
 
-    private PeerNode peerNode = new PeerNode();
+    private ChordNode chordNode = new ChordNode();
 
     private boolean isServerRunning;
     Socket socket;
     /**
      * constructor of the class to accept server request
      */
-    public PeerZoneManager() {
+    public KeySpaceManager() {
 
         try {
             serverSocket = new ServerSocket(9991);
@@ -309,7 +287,7 @@ class PeerZoneManager extends Thread {
             try {
 
                 socket = serverSocket.accept();
-                new PeerZoneManagerHandler(socket).start();
+                new KeySpaceManagerHandler(socket).start();
 
             } catch (IOException e) {
 
@@ -333,7 +311,7 @@ class PeerZoneManager extends Thread {
      * method to handle accepted thread of above class
      *
      */
-    private class PeerZoneManagerHandler extends Thread {
+    private class KeySpaceManagerHandler extends Thread {
         //data member of the class
         Socket socket;
 
@@ -345,7 +323,7 @@ class PeerZoneManager extends Thread {
          * constructor to handle the accepted threads
          * @param socket
          */
-        public PeerZoneManagerHandler(Socket socket) {
+        public KeySpaceManagerHandler(Socket socket) {
 
             this.socket = socket;
             clientIP = socket.getInetAddress().toString();
@@ -390,13 +368,13 @@ class PeerZoneManager extends Thread {
          */
         private void shareFilesToNewPeer() {
             System.out.println("Files are going to shared with new peer!!!!!!");
-            PeerFileManager fileManager = new PeerFileManager();
+            NodeKeyManager fileManager = new NodeKeyManager();
             List<String> deleteList = new ArrayList<>();
 
-            for(String fileName : peerNode.fileNames)
+            for(String fileName : chordNode.fileNames)
             {
                 System.out.println("FILE:"+fileName);
-                if(!peerNode.isInMyZone(peerNode.hash(fileName))) {
+                if(!chordNode.isInMyKeySpace(chordNode.hash(fileName))) {
                     System.out.println("FILE In ZONE:"+fileName);
                     fileManager.uploadFile_new_peer(fileName, true);
                     deleteList.add(fileName);
@@ -404,7 +382,7 @@ class PeerZoneManager extends Thread {
 
             }
 
-            peerNode.fileNames.removeAll(deleteList);
+            chordNode.fileNames.removeAll(deleteList);
 
         }
         /**
@@ -414,52 +392,52 @@ class PeerZoneManager extends Thread {
          */
         private void leave(DataOutputStream dataOutputStream) throws IOException {
 
-            String peerDetails[] = peerNode.getPeerDetails(clientIP);
-            boolean isEntryPoint = Boolean.parseBoolean(peerDetails[4]);
+            String NodeDesc[] = chordNode.getNodeDesc(clientIP);
+            boolean isEntryPoint = Boolean.parseBoolean(NodeDesc[4]);
 
             if(isEntryPoint)
             {
 
-                PeerMain.isEntryPoint = true;
-                PeerNode.isEntryPoint = true;
-                sendToBootStrap();
+                ChordPeerMain.isEntryPoint = true;
+                ChordNode.isEntryPoint = true;
+                sendToChordMain();
 
-                String zone[] = peerDetails[2].split(" ");
+                String zone[] = NodeDesc[2].split(" ");
 
-                PeerNode.setMyZone(  PeerNode.getMyZoneSrt() , PeerNode.getSuccessor().getZoneEnd());
-                PeerNode.setSuccessor(zone[0], Integer.parseInt(zone[1]), Integer.parseInt(zone[2]));
+                ChordNode.setMyEndpoint(  ChordNode.getNodeStart() , ChordNode.getSuccessor().getNodeEnd());
+                ChordNode.setSuccessor(zone[0], Integer.parseInt(zone[1]), Integer.parseInt(zone[2]));
 
-                if(zone[0].contains(PeerNode.getMyIP()))
+                if(zone[0].contains(ChordNode.getMyIP()))
                 {
-                    PeerNode.setSuccessor(PeerNode.getMyIP(), PeerNode.getMyZoneSrt(), PeerNode.getMyZoneEnd());
-                    PeerNode.setPredecessor(PeerNode.getMyIP(), PeerNode.getMyZoneSrt(), PeerNode.getMyZoneEnd());
+                    ChordNode.setSuccessor(ChordNode.getMyIP(), ChordNode.getNodeStart(), ChordNode.getNodeEnd());
+                    ChordNode.setPredecessor(ChordNode.getMyIP(), ChordNode.getNodeStart(), ChordNode.getNodeEnd());
 
                 }
 
             }
             else {
 
-                String zone[] = peerDetails[1].split(" ");
+                String zone[] = NodeDesc[1].split(" ");
 
-                PeerNode.setMyZone(  PeerNode.getPredecessor().getZoneSrt() , PeerNode.getMyZoneEnd());
-                PeerNode.setPredecessor(zone[0], Integer.parseInt(zone[1]), Integer.parseInt(zone[2]));
+                ChordNode.setMyEndpoint(  ChordNode.getPredecessor().getNodeStart() , ChordNode.getNodeEnd());
+                ChordNode.setPredecessor(zone[0], Integer.parseInt(zone[1]), Integer.parseInt(zone[2]));
 
-                if(zone[0].contains(PeerNode.getMyIP()))
+                if(zone[0].contains(ChordNode.getMyIP()))
                 {
 
-                    PeerNode.setSuccessor(PeerNode.getMyIP(), PeerNode.getMyZoneSrt(), PeerNode.getMyZoneEnd());
-                    PeerNode.setPredecessor(PeerNode.getMyIP(), PeerNode.getMyZoneSrt(), PeerNode.getMyZoneEnd());
+                    ChordNode.setSuccessor(ChordNode.getMyIP(), ChordNode.getNodeStart(), ChordNode.getNodeEnd());
+                    ChordNode.setPredecessor(ChordNode.getMyIP(), ChordNode.getNodeStart(), ChordNode.getNodeEnd());
 
                 }
 
             }
 
-            peerNode.sendNeighbourUpdate(PeerNode.getPredecessor().getIP(), 1);
-            peerNode.sendNeighbourUpdate(PeerNode.getSuccessor().getIP(), 0);
+            chordNode.sendNeighbourUpdate(ChordNode.getPredecessor().getIP(), 1);
+            chordNode.sendNeighbourUpdate(ChordNode.getSuccessor().getIP(), 0);
 
-            PeerNode.peerLookUP.runLookUP();
+            ChordNode.NodeFT.runFT();
 
-            PeerNode.peerLookUP.updateMyLookUP();
+            ChordNode.NodeFT.updateMyFT();
 
             MakeMessage makeMessage = new MakeMessage();
             sendData = makeMessage.message_creation(sendData, messageSize, "Confirmed");
@@ -474,12 +452,12 @@ class PeerZoneManager extends Thread {
          * @throws UnknownHostException
          * @throws IOException
          */
-        private void sendToBootStrap() throws UnknownHostException, IOException {
-            Socket entrySocket = new Socket(  PeerMain.serverIP, 8881 );
+        private void sendToChordMain() throws UnknownHostException, IOException {
+            Socket entrySocket = new Socket(  ChordPeerMain.serverIP, 8881 );
             DataOutputStream entryOutputStream = new DataOutputStream(entrySocket.getOutputStream());
 
             MakeMessage makeMessage = new MakeMessage();
-            sendData = makeMessage.message_creation(sendData, messageSize, PeerNode.getMyIP());
+            sendData = makeMessage.message_creation(sendData, messageSize, ChordNode.getMyIP());
             entryOutputStream.write(sendData);
             entryOutputStream.flush();
             entrySocket.close();
@@ -490,38 +468,38 @@ class PeerZoneManager extends Thread {
          * @throws IOException
          */
         private void add(DataOutputStream dataOutputStream) throws IOException {
-            int midPoint = PeerNode.getMyZoneSrt() + ((PeerNode.getMyZoneEnd() - PeerNode.getMyZoneSrt()) / 2);
+            int midPoint = ChordNode.getNodeStart() + ((ChordNode.getNodeEnd() - ChordNode.getNodeStart()) / 2);
 
-            if ( PeerNode.getMyIP().equals( PeerNode.getPredecessor().getIP() )
-                    && PeerNode.getMyIP().equals( PeerNode.getSuccessor().getIP() ) ) {
+            if ( ChordNode.getMyIP().equals( ChordNode.getPredecessor().getIP() )
+                    && ChordNode.getMyIP().equals( ChordNode.getSuccessor().getIP() ) ) {
 
-                String message1 = PeerNode.getMyZoneSrt() + " " + midPoint + " ";
+                String message1 = ChordNode.getNodeStart() + " " + midPoint + " ";
 
-                PeerNode.setPredecessor(clientIP, PeerNode.getMyZoneSrt(), midPoint);
-                PeerNode.setSuccessor(clientIP, PeerNode.getMyZoneSrt(), midPoint);
+                ChordNode.setPredecessor(clientIP, ChordNode.getNodeStart(), midPoint);
+                ChordNode.setSuccessor(clientIP, ChordNode.getNodeStart(), midPoint);
 
-                PeerNode.setMyZone((midPoint + 1), PeerNode.getMyZoneEnd());
+                ChordNode.setMyEndpoint((midPoint + 1), ChordNode.getNodeEnd());
 
-                String message2 = PeerNode.getMyIP() + " " + PeerNode.getMyZoneSrt() + " " + PeerNode.getMyZoneEnd() + " " +
-                        PeerNode.getMyIP() + " " + PeerNode.getMyZoneSrt() + " " + PeerNode.getMyZoneEnd();
+                String message2 = ChordNode.getMyIP() + " " + ChordNode.getNodeStart() + " " + ChordNode.getNodeEnd() + " " +
+                        ChordNode.getMyIP() + " " + ChordNode.getNodeStart() + " " + ChordNode.getNodeEnd();
 
                 MakeMessage makeMessage = new MakeMessage();
                 sendData = makeMessage.message_creation(sendData, messageSize, message1 + message2);
 
             } else {
 
-                String message1 = PeerNode.getMyZoneSrt() + " " + midPoint + " " + PeerNode.getPredecessor().getIP() + " "
-                        + PeerNode.getPredecessor().getZoneSrt() + " " + PeerNode.getPredecessor().getZoneEnd() + " " ;
+                String message1 = ChordNode.getNodeStart() + " " + midPoint + " " + ChordNode.getPredecessor().getIP() + " "
+                        + ChordNode.getPredecessor().getNodeStart() + " " + ChordNode.getPredecessor().getNodeEnd() + " " ;
 
-                PeerNode.setPredecessor(clientIP, PeerNode.getMyZoneSrt(), midPoint);
-                PeerNode.setMyZone((midPoint + 1), PeerNode.getMyZoneEnd());
+                ChordNode.setPredecessor(clientIP, ChordNode.getNodeStart(), midPoint);
+                ChordNode.setMyEndpoint((midPoint + 1), ChordNode.getNodeEnd());
 
-                String message2 = PeerNode.getMyIP() + " " + PeerNode.getMyZoneSrt() + " " + PeerNode.getMyZoneEnd();
+                String message2 = ChordNode.getMyIP() + " " + ChordNode.getNodeStart() + " " + ChordNode.getNodeEnd();
 
                 MakeMessage makeMessage = new MakeMessage();
                 sendData = makeMessage.message_creation(sendData, messageSize, message1 + message2);
 
-                peerNode.sendNeighbourUpdate(PeerNode.getSuccessor().getIP(), 0);
+                chordNode.sendNeighbourUpdate(ChordNode.getSuccessor().getIP(), 0);
 
             }
 
@@ -530,39 +508,26 @@ class PeerZoneManager extends Thread {
             dataOutputStream.flush();
 
         }
-        /**
-         * method to wrap the message to be sent to message size
-         * @param message-message to be sent
-         */
-//        private void makeMessage(String message) {
-//
-//            Arrays.fill(sendData, 0, messageSize, (byte) 0);
-//            byte messageByte[] = message.getBytes();
-//            ByteBuffer byteBuffer = ByteBuffer.wrap(sendData);
-//            byteBuffer.position(0);
-//            byteBuffer.put(messageByte);
-//            sendData = byteBuffer.array();
-//
-//        }
+
 
     }
 
 }
 
-class PeerFileDownloadListener extends Thread {
+class FileDownloadListener extends Thread {
     //data members of the class
     private static final int messageSize = 1024;
 
     private ServerSocket serverSocket;
 
-    PeerNode peerNode = new PeerNode();
+    ChordNode chordNode = new ChordNode();
     private boolean isServerRunning;
     Socket socket;
     private byte fileInPackets[][];
     /**
      * constructor to handle the server request
      */
-    public PeerFileDownloadListener() {
+    public FileDownloadListener() {
 
         try {
             serverSocket = new ServerSocket(9495);
@@ -641,7 +606,7 @@ class PeerFileDownloadListener extends Thread {
                 String data=new String(recvData);
                 String[] fileDetails=data.split(" ");
 
-                peerNode.addfileNames(fileDetails[0]);
+                chordNode.addFiles(fileDetails[0]);
                 int totalPackets=Integer.parseInt(fileDetails[1]);
                 fileInPackets=new byte[totalPackets][messageSize];
                 for(int i =0;i<totalPackets;i++)
@@ -654,7 +619,7 @@ class PeerFileDownloadListener extends Thread {
 
                 System.out.println("Download Complete.");
 
-                PeerNode.printOptionsMenu();
+                ChordNode.printOptionsMenu();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -669,13 +634,13 @@ class PeerFileDownloadListener extends Thread {
          */
         private void fileWrite(String filepath,int totalPackets) throws IOException
         {
-            File file = new File(PeerNode.getMyIP());
+            File file = new File(ChordNode.getMyIP());
 
             if(!file.exists())
                 file.mkdirs();
 
 
-            FileOutputStream fos = new FileOutputStream(PeerNode.getMyIP() + "/" + String.valueOf(peerNode.hash(filepath)));
+            FileOutputStream fos = new FileOutputStream(ChordNode.getMyIP() + "/" + String.valueOf(chordNode.hash(filepath)));
 
             byte[] finalFile = extractFileContents(fileInPackets);
             fos.write(finalFile);
@@ -714,7 +679,7 @@ class PeerFileDownloadListener extends Thread {
 }
 
 
-class PeerFileManager extends Thread {
+class NodeKeyManager extends Thread {
     //data member of the class
     private static final int messageSize = 1024;
     private File file;
@@ -725,7 +690,7 @@ class PeerFileManager extends Thread {
     private byte fileInBytes[];
     private byte fileInPackets[][];
 
-    PeerNode peerNode = new PeerNode();
+    ChordNode chordNode = new ChordNode();
 
     Socket socket;
 
@@ -739,7 +704,7 @@ class PeerFileManager extends Thread {
     /**
      * contructor of the class
      */
-    public PeerFileManager() {
+    public NodeKeyManager() {
 
     }
 
@@ -755,35 +720,35 @@ class PeerFileManager extends Thread {
         if(isFileAvailable(path)){
             String arr[] = path.split("/");
             String filePath_name = arr[arr.length-1];
-            sendZoneTo = peerNode.hash(filePath_name);
+            sendZoneTo = chordNode.hash(filePath_name);
             System.out.println("File sending to zone :" + sendZoneTo);
             if(!share)
                 readFile(!share);
             else
                 readFile(share);
-            sendToIP = peerNode.getZoneIP(sendZoneTo, peerNode.nearestPeer(sendZoneTo));
-            makePackets();
-            sendPackets();
+            sendToIP = chordNode.getKeySpaceIP(sendZoneTo, chordNode.nearestNode(sendZoneTo));
+            packetsToCreate();
+            packetsToSend();
             System.out.println("Upload complete!");
         }
         else{
             System.out.println(filePath+" is not available please try again");
-            PeerNode.printOptionsMenu();
+            ChordNode.printOptionsMenu();
         }
 
     }
 
     public void uploadFile_new_peer(String path, boolean share) {
         filePath = path;
-        sendZoneTo = peerNode.hash(filePath);
+        sendZoneTo = chordNode.hash(filePath);
         System.out.println("File sending to zone :" + sendZoneTo);
         if(!share)
             readFile(!share);
         else
             readFile(share);
-        sendToIP = peerNode.getZoneIP(sendZoneTo, peerNode.nearestPeer(sendZoneTo));
-        makePackets();
-        sendPackets();
+        sendToIP = chordNode.getKeySpaceIP(sendZoneTo, chordNode.nearestNode(sendZoneTo));
+        packetsToCreate();
+        packetsToSend();
         System.out.println("Upload complete!");
     }
 
@@ -800,17 +765,17 @@ class PeerFileManager extends Thread {
      */
     public void downloadFile(String filePath) throws IOException {
         System.out.println("Download request formed for file :" + filePath);
-//        filePath = "../"+PeerNode.getMyIP()+filePath;
-        recvZoneFrom = peerNode.hash(filePath);
+//        filePath = "../"+ChordNode.getMyIP()+filePath;
+        recvZoneFrom = chordNode.hash(filePath);
         System.out.println("Requesting file from zone: " + recvZoneFrom);
-        recvIPFrom = peerNode.getZoneIP(recvZoneFrom, peerNode.nearestPeer(recvZoneFrom));
+        recvIPFrom = chordNode.getKeySpaceIP(recvZoneFrom, chordNode.nearestNode(recvZoneFrom));
         socket = new Socket(recvIPFrom, recvPortFrom);
 
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
         DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
 
         byte recvData[] = new byte[messageSize];
-        File file = new File(PeerNode.getMyIP());
+        File file = new File(ChordNode.getMyIP());
         if(!file.exists())
             file.mkdirs();
         sendData = filePath.getBytes();
@@ -821,7 +786,7 @@ class PeerFileManager extends Thread {
         if (!data.contains("NoSuchFile")) {
             String[] fileDetails = data.split(" ");
 
-            peerNode.addfileNames(fileDetails[0]);
+            chordNode.addFiles(fileDetails[0]);
             int totalPackets = Integer.parseInt(fileDetails[1]);
             fileInPackets = new byte[totalPackets][messageSize];
             for (int i = 0; i < totalPackets; i++) {
@@ -829,7 +794,7 @@ class PeerFileManager extends Thread {
                 System.arraycopy(recvData, 0, fileInPackets[i], 0, messageSize);
 
             }
-            FileOutputStream fos = new FileOutputStream(String.valueOf(peerNode.hash(fileDetails[0])));
+            FileOutputStream fos = new FileOutputStream(String.valueOf(chordNode.hash(fileDetails[0])));
             System.out.println("File received.");
 
             for (int j = 0; j <= totalPackets - 1; j++) {
@@ -846,14 +811,14 @@ class PeerFileManager extends Thread {
         }
         else{
             System.out.println(filePath+" not available");
-            PeerNode.printOptionsMenu();
+            ChordNode.printOptionsMenu();
         }
     }
 
     /**
      * method to send the packets to upload
      */
-    private void sendPackets() {
+    private void packetsToSend() {
         try {
             Socket socket = new Socket(sendToIP, sendPortTo);
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -888,11 +853,11 @@ class PeerFileManager extends Thread {
                         file = new File(filePath);
                     }
                     else {
-                        if (isFileAvailable(String.valueOf(peerNode.hash(filePath)))) {
-                            file = new File(String.valueOf(peerNode.hash(filePath)));
+                        if (isFileAvailable(String.valueOf(chordNode.hash(filePath)))) {
+                            file = new File(String.valueOf(chordNode.hash(filePath)));
                         }
                         else {
-                            file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
+                            file = new File(ChordNode.getMyIP() + "/" + chordNode.hash(filePath));
                         }
                     }
                 }
@@ -901,7 +866,7 @@ class PeerFileManager extends Thread {
                 }
             }
             else
-                file = new File(PeerNode.getMyIP() + "/" + peerNode.hash(filePath));
+                file = new File(ChordNode.getMyIP() + "/" + chordNode.hash(filePath));
             try {
                 fileInBytes = Files.readAllBytes(file.toPath());
 
@@ -912,7 +877,7 @@ class PeerFileManager extends Thread {
     /**
      * method to make packets for the file to be sent
      */
-    private void makePackets() {
+    private void packetsToCreate() {
 
         fileSize = file.length();
         totalPackets = (int) Math.ceil(fileSize / (double) messageSize);
@@ -924,20 +889,7 @@ class PeerFileManager extends Thread {
                 (int) fileSize - (totalPackets - 1) * 1024);
 
     }
-    /**
-     * method to wrap the message to be sent to message size
-     * @param message-message to be sent
-     */
-//    private void makeMessage(String message) {
-//
-//        Arrays.fill(sendData, 0, messageSize, (byte) 0);
-//        byte messageByte[] = message.getBytes();
-//        ByteBuffer byteBuffer = ByteBuffer.wrap(sendData);
-//        byteBuffer.position(0);
-//        byteBuffer.put(messageByte);
-//        sendData = byteBuffer.array();
-//
-//    }
+
 }
 
 

@@ -23,6 +23,7 @@
 hs_err_pid*
 
 # IntelliJ files
-.idea/
+out/
+.idea/*.xml
 *.iml
 .DS_Store

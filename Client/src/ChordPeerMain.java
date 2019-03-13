@@ -13,7 +13,7 @@ import java.util.Arrays;
  * as the entry point.
  *
  */
-public class PeerMain {
+public class ChordPeerMain {
 
 	private static final int messageSize = 64;
 
@@ -33,15 +33,15 @@ public class PeerMain {
 
 	// Main fuction
 	public static void main(String args[]) {
-		PeerMain peerMain = new PeerMain();
+		ChordPeerMain chordPeerMain = new ChordPeerMain();
 
 		serverIP = args[0];
-		System.out.println("serverIP:"+serverIP);
-		peerMain.initialSetUp(serverIP);
 
-		PeerNode peerNode = new PeerNode(peerMain.randomNumberGenerated, peerMain.entryPoint, peerMain.currentIP);
+		chordPeerMain.chordInitialize(serverIP);
 
-		peerNode.run();
+		ChordNode chordNode = new ChordNode(chordPeerMain.randomNumberGenerated, chordPeerMain.entryPoint, chordPeerMain.currentIP);
+
+		chordNode.run();
 		
 	}
 
@@ -49,7 +49,7 @@ public class PeerMain {
 	 * Asks the bootstrap to join the chord network
 	 * @param serverIP IP of the bootstrap
      */
-	private void initialSetUp(String serverIP) {
+	private void chordInitialize(String serverIP) {
 
 		try {
 			Socket socket = new Socket(serverIP, 8880);
@@ -59,10 +59,8 @@ public class PeerMain {
 			dataInputStream.read(recvByte, 0, recvByte.length);
 
 			String message = new String(Arrays.copyOfRange(recvByte, 0, messageSize)).trim(); //input from peer ie upload file, download file etc.
-			System.out.println("message:"+message);
+			System.out.println("message:"+ message);
 			String messageArray[] = message.split(" ");
-
-			System.out.println("messageArray[]:"+messageArray[0]+" "+messageArray[1]);
 
 			randomNumberGenerated = Integer.parseInt(messageArray[0]);
 

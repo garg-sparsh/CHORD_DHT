@@ -10,11 +10,11 @@ import java.util.Random;
 
 /**
  *
- * The class BootstrapListener listens for peers that need to join
+ * The class ChordListener listens for peers that need to join
  * into the chord network. The class is a thread which listens for
  * multiple clients at a given point.
  */
-public class BootstrapListener extends Thread {
+public class ChordListener extends Thread {
 	
 	private static final int messageSize = 64;
 	
@@ -24,7 +24,7 @@ public class BootstrapListener extends Thread {
 	static private String chordIP;
 
 	// constructor.
-	public BootstrapListener() {
+	public ChordListener() {
 		
 		try {
 			
@@ -44,10 +44,10 @@ public class BootstrapListener extends Thread {
 		try {
 			
 			while( true ) {
-				System.out.println("Bootstrap listener running");
+				System.out.println("Chord listener running");
 				socket = serverSocket.accept();
 			
-				new BootstrapHandler( socket ).start();
+				new ChordHandler( socket ).start();
 			}
 			
 		}
@@ -58,20 +58,20 @@ public class BootstrapListener extends Thread {
 
 	/**
 	 *
-	 * The class is a supporting class for BootstrapListener. It responses
+	 * The class is a supporting class for ChordListener. It responds
 	 * to the peers that needs to join into the chord network. The class
-	 * responses back woth a random zone number and an entrypoint IP. If the
-	 * peer is the first peer to the network, the Bootstrap makes the peer
+	 * responds back with a random zone number and an entrypoint IP. If the
+	 * peer is the first peer to the network, the Chord makes the peer
 	 * as the entry point.
 	 *
 	 */
-	private class BootstrapHandler extends Thread {
+	private class ChordHandler extends Thread {
 
 		Socket socket;
 		byte[] sendByte=new byte[messageSize];
 
 		// constructor
-		public BootstrapHandler( Socket socket ) {
+		public ChordHandler( Socket socket ) {
 			
 			this.socket = socket;
 			
@@ -87,7 +87,7 @@ public class BootstrapListener extends Thread {
 				int zonePos;
 				int messagePos = 0;
 				
-				zonePos = random.nextInt(BootstrapMain.getN() - 2) + 1;
+				zonePos = random.nextInt(ChordMain.getN() - 2) + 1;
 				
 				if( chordIP.equals("") ) {
 					makeMessage(zonePos + " " + "isEntryPoint", messagePos);
@@ -136,7 +136,7 @@ public class BootstrapListener extends Thread {
 }
 
 
-class BootstrapEntryListener extends Thread {
+class ChordEntryListener extends Thread {
 
 	private static final int messageSize = 64;
 
@@ -144,7 +144,7 @@ class BootstrapEntryListener extends Thread {
 	private Socket socket;
 
 	// constructor
-	public BootstrapEntryListener() {
+	public ChordEntryListener() {
 
 		try {
 
@@ -163,10 +163,10 @@ class BootstrapEntryListener extends Thread {
 		try {
 
 			while( true ) {
-				System.out.println("Bootstrap Entry Point listener running");
+				System.out.println("Chord Entry Point listener running");
 				socket = serverSocket.accept();
 
-				new BootstrapEntryHandler( socket ).start();
+				new ChordEntryHandler( socket ).start();
 			}
 
 		}
@@ -177,22 +177,22 @@ class BootstrapEntryListener extends Thread {
 
 	/**
 	 *
-	 * The class is a supporting class for BootstrapEntryListener. It responses
+	 * The class is a supporting class for ChordEntryListener. It responds
 	 * to the peers that sends its IP as entry point.
 	 *
 	 */
-	private class BootstrapEntryHandler extends Thread {
+	private class ChordEntryHandler extends Thread {
 
 		Socket socket;
 		byte[] recvMessage =new byte[messageSize];
 		String clientIP;
 
 		// constructor
-		public BootstrapEntryHandler( Socket socket ) {
+		public ChordEntryHandler( Socket socket ) {
 
 			this.socket = socket;
 			clientIP = socket.getInetAddress().toString();
-			clientIP = clientIP.substring(1, clientIP.length());
+			clientIP = clientIP.substring(1);
 
 		}
 
@@ -204,7 +204,7 @@ class BootstrapEntryListener extends Thread {
 				DataInputStream dataInputStream = new DataInputStream( socket.getInputStream() );
 				dataInputStream.read(recvMessage, 0, recvMessage.length);
 
-				BootstrapListener.setChordIP(clientIP);
+				ChordListener.setChordIP(clientIP);
 				System.out.println("New Chord Entry Point set - " + clientIP);
 
 			}

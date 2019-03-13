@@ -13,18 +13,18 @@ import java.util.zip.Checksum;
 
 
 /***
- * Class PeerNode is the main program for each peer which initiates
+ * Class ChordNode is the main program for each peer which initiates
  * several listeners and transmitters needed to maintain zones in Chord.
  */
-public class PeerNode {
+public class ChordNode {
 
 	private static final int messageSize = 64;
 
-	private static int myZoneSrt;
-	private static int myZoneEnd;
+	private static int nodeStart;
+	private static int nodeEnd;
 
-	private static PeerNeighbour predecessor;
-	private static PeerNeighbour successor;
+	private static Neighbour predecessor;
+	private static Neighbour successor;
 	private File file;
 	private static String filePath;
 
@@ -34,45 +34,45 @@ public class PeerNode {
 	private byte recvData[] = new byte[messageSize];
 	private byte recvBiggerData[] = new byte[1024];
 
-	static test peerCheckZone;
-	static PeerZoneManager peerZoneManager;
-	static PeerLookUP peerLookUP;
-	static PeerNeighbourUpdate peerNeighbourUpdate;
-	static PeerDetails peerDetails;
-	static PeerLookUpUpdate peerLookUpUpdate;
-	static PeerFileDownloadListener peerFileDownload;
-	static PeerTransmitterListener peerFileTransmitter;
+	static KeySpace checkKeySpace;
+	static KeySpaceManager KeySpaceManager;
+	static NodeFT NodeFT;
+	static NeighbourUpdate neighbourUpdate;
+	static NodeDesc NodeDesc;
+	static NodeFTUpdate NodeFTUpdate;
+	static FileDownloadListener nodeFileDownload;
+	static TransferListener peerFileTransmitter;
 	static Boolean isEntryPoint = false;
 	static List<String> fileNames = new ArrayList<String>();
 
 	// getter & setter
 
-	public static int getMyZoneSrt() {
-		return myZoneSrt;
+	public static int getNodeStart() {
+		return nodeStart;
 	}
 
-	public static int getMyZoneEnd() {
-		return myZoneEnd;
+	public static int getNodeEnd() {
+		return nodeEnd;
 	}
 
-	public static void setMyZone(int srt, int end) {
-		myZoneSrt = srt;
-		myZoneEnd = end;
+	public static void setMyEndpoint(int srt, int end) {
+		nodeStart = srt;
+		nodeEnd = end;
 	}
 
 	/**
 	 * GetPredecessor method returns the predecessor of this method.
-	 * @return PeerNeighbour class object of the predecessor
+	 * @return Neighbour class object of the predecessor
      */
-	public static PeerNeighbour getPredecessor() {
+	public static Neighbour getPredecessor() {
 		return predecessor;
 	}
 
 	/**
 	 * GetSuccessor method returns the successor of this method.
-	 * @return PeerNeighbour class object of the successor
+	 * @return Neighbour class object of the successor
 	 */
-	public static PeerNeighbour getSuccessor() {
+	public static Neighbour getSuccessor() {
 		return successor;
 	}
 
@@ -97,7 +97,7 @@ public class PeerNode {
 	}
 
 	/***
-	 * getMyIP returns this PeerNode's IP address
+	 * getMyIP returns this ChordNode's IP address
 	 * @return
      */
 	public static String getMyIP() {
@@ -105,7 +105,7 @@ public class PeerNode {
 	}
 
 
-	public PeerNode() {
+	public ChordNode() {
 
 	}
 
@@ -114,47 +114,47 @@ public class PeerNode {
 	 * stored at this node.
 	 * @param name
      */
-	public void addfileNames(String name) {
+	public void addFiles(String name) {
 		fileNames.add(name);
 	}
 
 
 	/***
-	 * Constructor for the PeerNode which takes a randomNumber and an entryPoint value
+	 * Constructor for the ChordNode which takes a randomNumber and an entryPoint value
 	 * @param randomNumber
 	 * @param entryPoint
      */
-	public PeerNode(int randomNumber, String entryPoint, String currentIP) {
+	public ChordNode(int randomNumber, String entryPoint, String currentIP) {
 		System.out.println("entryPoint:"+entryPoint+" "+randomNumber);
 		myIP = currentIP;
-		isEntryPoint = PeerMain.isEntryPoint;
+		isEntryPoint = ChordPeerMain.isEntryPoint;
 
-		if (PeerMain.isEntryPoint) {
-			myZoneSrt = 0;
-			myZoneEnd = 127;
-			predecessor = new PeerNeighbour(myIP, myZoneSrt, myZoneEnd);
-			successor = new PeerNeighbour(myIP, myZoneSrt, myZoneEnd);
+		if (ChordPeerMain.isEntryPoint) {
+			nodeStart = 0;
+			nodeEnd = 127;
+			predecessor = new Neighbour(myIP, nodeStart, nodeEnd);
+			successor = new Neighbour(myIP, nodeStart, nodeEnd);
 		} else {
 
-			requestForZone(randomNumber, entryPoint);
+			keySpaceRequest(randomNumber, entryPoint);
 		}
 
-		//Initiates a PeerNode's listeners and transmitters.
-		peerCheckZone = new test();
-		peerCheckZone.start();
-		peerZoneManager = new PeerZoneManager();
-		peerZoneManager.start();
-		peerLookUP = new PeerLookUP();
-		peerLookUP.runLookUP();
-		peerNeighbourUpdate = new PeerNeighbourUpdate();
-		peerNeighbourUpdate.start();
-		peerDetails = new PeerDetails();
-		peerDetails.start();
-		peerLookUpUpdate = new PeerLookUpUpdate();
-		peerLookUpUpdate.start();
-		peerFileDownload = new PeerFileDownloadListener();
-		peerFileDownload.start();
-		peerFileTransmitter = new PeerTransmitterListener();
+		//Initiates a ChordNode's listeners and transmitters.
+		checkKeySpace = new KeySpace();
+		checkKeySpace.start();
+		KeySpaceManager = new KeySpaceManager();
+		KeySpaceManager.start();
+		NodeFT = new NodeFT();
+		NodeFT.runFT();
+		neighbourUpdate = new NeighbourUpdate();
+		neighbourUpdate.start();
+		NodeDesc = new NodeDesc();
+		NodeDesc.start();
+		NodeFTUpdate = new NodeFTUpdate();
+		NodeFTUpdate.start();
+		nodeFileDownload = new FileDownloadListener();
+		nodeFileDownload.start();
+		peerFileTransmitter = new TransferListener();
 		peerFileTransmitter.start();
 	}
 
@@ -183,7 +183,7 @@ public class PeerNode {
 					System.out.println("At least one peer needed to maintain the chord!!!");
 					break;
 				}
-				if (!leaveZone()) {
+				if (!leaveChord()) {
 					System.out.println("Leave Zone failed. Try again.");
 				} else {
 					System.out.println("Leave Zone success. Node shutdown complete.");
@@ -194,7 +194,7 @@ public class PeerNode {
 				System.out.println("Enter the file name to upload");
 				scanner = new Scanner(System.in);
 				filePath = scanner.nextLine();
-				PeerFileManager peerFileUpload = new PeerFileManager();
+				NodeKeyManager peerFileUpload = new NodeKeyManager();
 				peerFileUpload.uploadFile(filePath, false);
 				break;
 			case 4://Option to download file from chord zone
@@ -202,9 +202,9 @@ public class PeerNode {
 				scanner = new Scanner(System.in);
 				filePath = scanner.nextLine();
 				filePath = new File(filePath).getName();
-				PeerFileManager peerFiledownload = new PeerFileManager();
+				NodeKeyManager nodeFileDownload = new NodeKeyManager();
 				try {
-					peerFiledownload.downloadFile(filePath);
+					nodeFileDownload.downloadFile(filePath);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -246,24 +246,24 @@ public class PeerNode {
 	 */
 	private void getDetails() {
 
-		int totalIter = PeerMain.n;
-		int zoneChecking = myZoneSrt;
+		int totalIter = ChordPeerMain.n;
+		int zoneChecking = nodeStart;
 
-		while (zoneChecking != myZoneEnd) {
+		while (zoneChecking != nodeEnd) {
 			totalIter--;
 			zoneChecking++;
 
 		}
 
-		System.out.println(myIP + " Zone details:" + myZoneSrt + "-" + myZoneEnd);
+		System.out.println(myIP + " Zone details:" + nodeStart + "-" + nodeEnd);
 		System.out.println(
-				"Predecessor:" + predecessor.getIP() + " " + predecessor.getZoneSrt() + " " + predecessor.getZoneEnd());
+				"Predecessor:" + predecessor.getIP() + " " + predecessor.getNodeStart() + " " + predecessor.getNodeEnd());
 		System.out.println(
-				"Successor:" + successor.getIP() + " " + successor.getZoneSrt() + " " + successor.getZoneEnd());
+				"Successor:" + successor.getIP() + " " + successor.getNodeStart() + " " + successor.getNodeEnd());
 
 		System.out.println("Finger Table:");
-		for (int i = 0; i < PeerMain.m; i++) {
-			System.out.println(i + " " + peerLookUP.getPeerIP(i));
+		for (int i = 0; i < ChordPeerMain.m; i++) {
+			System.out.println(i + " " + NodeFT.getPeerIP(i));
 		}
 
 		System.out.println("Is EntryPoint:" + isEntryPoint);
@@ -272,15 +272,15 @@ public class PeerNode {
 
 		totalIter--;
 		zoneChecking++;
-		if (zoneChecking >= PeerMain.n) {
+		if (zoneChecking >= ChordPeerMain.n) {
 			zoneChecking = 0;
 		}
 
 		while (totalIter > 0) {
 
-			String peerIP = getZoneIP(zoneChecking, nearestPeer(zoneChecking));
+			String peerIP = getKeySpaceIP(zoneChecking, nearestNode(zoneChecking));
 
-			String message[] = getPeerDetails(peerIP);
+			String message[] = getNodeDesc(peerIP);
 			String zone[] = message[0].split(" ");
 			String lookUP[] = message[3].split(" ");
 			int endZone = Integer.parseInt(zone[1]);
@@ -290,7 +290,7 @@ public class PeerNode {
 			System.out.println("Successor:" + message[2]);
 
 			System.out.println("Finger Table:");
-			for (int i = 0; i < PeerMain.m; i++) {
+			for (int i = 0; i < ChordPeerMain.m; i++) {
 				System.out.println(i + " " + lookUP[i]);
 			}
 
@@ -300,7 +300,7 @@ public class PeerNode {
 
 			totalIter--;
 			zoneChecking++;
-			if (zoneChecking >= PeerMain.n) {
+			if (zoneChecking >= ChordPeerMain.n) {
 				zoneChecking = 0;
 			}
 
@@ -309,7 +309,7 @@ public class PeerNode {
 				zoneChecking++;
 			}
 
-			if (zoneChecking >= PeerMain.n) {
+			if (zoneChecking >= ChordPeerMain.n) {
 				zoneChecking = 0;
 			}
 
@@ -329,17 +329,15 @@ public class PeerNode {
 	}
 
 	/***
-	 * requestForZone method takes a randomNumber and requestIP as input and based
+	 * keySpaceRequest method takes a randomNumber and requestIP as input and based
 	 * on the IP found for the zone, a request is placed to that particular zone owner.
 	 * @param randomNumber
 	 * @param requestIP
      */
-	private void requestForZone(int randomNumber, String requestIP) {
-		System.out.println("requestIP:"+requestIP);
+	private void keySpaceRequest(int randomNumber, String requestIP) {
 
-		requestIP = getZoneIP(randomNumber, requestIP);
-		System.out.println("requestIP_new:"+requestIP);
-		getMyZone(randomNumber, requestIP);
+		requestIP = getKeySpaceIP(randomNumber, requestIP);
+		getKeySpace(randomNumber, requestIP);
 
 	}
 
@@ -359,17 +357,17 @@ public class PeerNode {
 	}
 
 	/**
-	 * leaveZone method takes care of all the updates it needs to do before this
+	 * leaveChord method takes care of all the updates it needs to do before this
 	 * node leaves the zone.
 	 * @return a boolean value if the request for leaving the zone has been confirmed
 	 * by the concerned peer.
      */
-	private boolean leaveZone() {
+	private boolean leaveChord() {
 
 		Socket socket;
 
 		try {
-			if (PeerNode.isEntryPoint) {
+			if (ChordNode.isEntryPoint) {
 				socket = new Socket(predecessor.getIP(), 9991);
 
 			} else {
@@ -415,13 +413,13 @@ public class PeerNode {
 	 */
 	private void stopAllNodeListeners() {
 
-		peerCheckZone.stopServer();
-		peerZoneManager.stopServer();
-		peerNeighbourUpdate.stopServer();
-		peerDetails.stopServer();
-		peerLookUpUpdate.stopServer();
+		checkKeySpace.stopServer();
+		KeySpaceManager.stopServer();
+		neighbourUpdate.stopServer();
+		NodeDesc.stopServer();
+		NodeFTUpdate.stopServer();
 		peerFileTransmitter.stopServer();
-		peerFileDownload.stopServer();
+		nodeFileDownload.stopServer();
 	}
 
 	/***
@@ -429,24 +427,24 @@ public class PeerNode {
 	 * present at this node to their respective zone owners.
 	 */
 	private void shareFilesToNeighbours() {
-		PeerNode.setMyZone(-1, -1);
-		PeerFileManager fileManager = new PeerFileManager();
+		ChordNode.setMyEndpoint(-1, -1);
+		NodeKeyManager fileManager = new NodeKeyManager();
 
-		for(String fileName : PeerNode.fileNames)
+		for(String fileName : ChordNode.fileNames)
 		{
 			fileManager.uploadFile_new_peer(fileName, true);
 		}
 	}
 
 	/***
-	 * getMyZone method places the request to get into the zone owner by
+	 * getKeySpace method places the request to get into the zone owner by
 	 * a peer. Once confirmed by the peer, this node is instantiated with
 	 * the neccessary details.
 	 *
 	 * @param randomNumber
 	 * @param requestIP
      */
-	private void getMyZone(int randomNumber, String requestIP) {
+	private void getKeySpace(int randomNumber, String requestIP) {
 
 		try {
 
@@ -464,12 +462,12 @@ public class PeerNode {
 
 			String initDetails[] = new String(recvData).trim().split(" ");
 
-			myZoneSrt = Integer.parseInt(initDetails[0]);
-			myZoneEnd = Integer.parseInt(initDetails[1]);
+			nodeStart = Integer.parseInt(initDetails[0]);
+			nodeEnd = Integer.parseInt(initDetails[1]);
 
-			predecessor = new PeerNeighbour(initDetails[2], Integer.parseInt(initDetails[3]),
+			predecessor = new Neighbour(initDetails[2], Integer.parseInt(initDetails[3]),
 					Integer.parseInt(initDetails[4]));
-			successor = new PeerNeighbour(initDetails[5], Integer.parseInt(initDetails[6]),
+			successor = new Neighbour(initDetails[5], Integer.parseInt(initDetails[6]),
 					Integer.parseInt(initDetails[7]));
 
 			socket.close();
@@ -503,37 +501,16 @@ public class PeerNode {
 
 	}
 
-	/**
-	 * MyIP method returns this node's IP address.
-	 */
-//	private void MyIP() {
-//		try {
-//			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-//			while (interfaces.hasMoreElements()) {
-//				NetworkInterface iface = interfaces.nextElement();
-//				if (iface.isLoopback() || !iface.isUp())
-//					continue;
-//
-//				Enumeration<InetAddress> addresses = iface.getInetAddresses();
-//				while (addresses.hasMoreElements()) {
-//					InetAddress addr = addresses.nextElement();
-//					myIP = addr.getHostAddress();
-//				}
-//			}
-//		} catch (SocketException e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
 
 
 	/**
-	 * getZoneIP method is common class used by several components to retrieve IP address for
+	 * getKeySpaceIP method is common class used by several components to retrieve IP address for
 	 * a given zone number.
 	 * @param zoneNumber
 	 * @param requestIP
      * @return
      */
-	public String getZoneIP(int zoneNumber, String requestIP) {
+	public String getKeySpaceIP(int zoneNumber, String requestIP) {
 
 
 		boolean isPeerZone = false;
@@ -587,9 +564,9 @@ public class PeerNode {
 			DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
 			if (value == 0) {
-				makeMessage("predecessor" + " " + myZoneSrt + " " + myZoneEnd);
+				makeMessage("predecessor" + " " + nodeStart + " " + nodeEnd);
 			} else {
-				makeMessage("successor" + " " + myZoneSrt + " " + myZoneEnd);
+				makeMessage("successor" + " " + nodeStart + " " + nodeEnd);
 			}
 
 			dataOutputStream.write(sendData);
@@ -604,12 +581,12 @@ public class PeerNode {
 	}
 
 	/**
-	 * getPeerDetails method retrieves a peer's details when an IP address
+	 * getNodeDesc method retrieves a peer's details when an IP address
 	 * is supplied.
 	 * @param IP
 	 * @return
      */
-	public String[] getPeerDetails(String IP) {
+	public String[] getNodeDesc(String IP) {
 
 		String message[] = null;
 
@@ -634,69 +611,30 @@ public class PeerNode {
 	}
 
 	/**
-	 * nearestPeer method returns the closest peer for
+	 * nearestNode method returns the closest peer for
 	 * a particular zone that's given.
 	 * @param zone
 	 * @return
      */
-	public String nearestPeer(int zone) {
+	public String nearestNode(int zone) {
 
-//		int nearestZone;
-//
-//		String nearestIP;
-//
-//		int tempNearestZone;
-//		String tempNearestIP;
-//
-//		nearestZone = myZoneEnd + PeerNode.peerLookUP.getZonePos(0);
-//		System.out.println("nearestZone:"+nearestZone);
-//		if (nearestZone >= PeerMain.n) {
-//			nearestZone = nearestZone % PeerMain.n;
-//		}
-//
-//		nearestIP = PeerNode.peerLookUP.getPeerIP(0);
-//		int nearestSub = zone - nearestZone;
-//		if (nearestSub < 0) {
-//			nearestSub = PeerMain.n + nearestSub;
-//		}
-//		System.out.println("nearestSub:"+nearestSub);
-//		for (int i = 1; i < PeerMain.m; i++) {
-//			tempNearestZone = PeerNode.peerLookUP.getZonePos(i);
-//			if (tempNearestZone < 0) {
-//				tempNearestZone = PeerMain.n + tempNearestZone;
-//			}
-//			tempNearestIP = PeerNode.peerLookUP.getPeerIP(i);
-//			int tempSub = zone - tempNearestZone;
-//			if (tempSub < 0) {
-//				tempSub = PeerMain.n + tempSub;
-//			}
-//			if (tempSub < nearestSub && tempSub >= 0) {
-//				nearestZone = tempNearestZone;
-//				nearestIP = tempNearestIP;
-//				nearestSub = tempSub;
-//			}
-//			System.out.println("nearestSub_new:"+nearestSub);
-//
-//		}
-//		System.out.println("nearestIP_new:"+nearestIP);
-//		return nearestIP;
-		int nearestZone = myZoneEnd + PeerNode.peerLookUP.getZone(0);
-		String nearestIP = PeerNode.peerLookUP.getPeerIP(0);;
+		int nearestZone = nodeEnd + ChordNode.NodeFT.getZone(0);
+		String nearestIP = ChordNode.NodeFT.getPeerIP(0);;
 		int nearestSub = zone - nearestZone;
 
 		int tempNearestZone;
 		String tempNearestIP;
 
-		for (int i = 1;i<PeerMain.m;i++){
-			tempNearestZone = myZoneEnd + PeerNode.peerLookUP.getZone(i);
-			if (tempNearestZone >= PeerMain.n) {
-				tempNearestZone = tempNearestZone % PeerMain.n;
+		for (int i = 1; i< ChordPeerMain.m; i++){
+			tempNearestZone = nodeEnd + ChordNode.NodeFT.getZone(i);
+			if (tempNearestZone >= ChordPeerMain.n) {
+				tempNearestZone = tempNearestZone % ChordPeerMain.n;
 			}
-			tempNearestIP = PeerNode.peerLookUP.getPeerIP(i);
+			tempNearestIP = ChordNode.NodeFT.getPeerIP(i);
 			int tempSub = zone - tempNearestZone;
 
 			if (tempSub < 0) {
-				tempSub = PeerMain.n + tempSub;
+				tempSub = ChordPeerMain.n + tempSub;
 			}
 			if (tempSub < nearestSub && tempSub >= 0) {
 				nearestIP = tempNearestIP;
@@ -711,13 +649,13 @@ public class PeerNode {
 	}
 
 	/**
-	 * isInMyZone method checks whether the given zone is in this peer node's range.
+	 * isInMyKeySpace method checks whether the given zone is in this peer node's range.
 	 * @param zone
 	 * @return
      */
-	public boolean isInMyZone(int zone)
+	public boolean isInMyKeySpace(int zone)
 	{
-		return (zone <= PeerNode.getMyZoneEnd() && zone >= PeerNode.getMyZoneSrt());
+		return (zone <= ChordNode.getNodeEnd() && zone >= ChordNode.getNodeStart());
 	}
 
 

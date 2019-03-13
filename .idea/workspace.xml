@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0a9d0bd3-5ca2-4675-88cb-fabef8197a2a" name="Default Changelist" comment="">
+    <list default="true" id="e918f5f2-8c47-4640-941c-8ec928a7882d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/PeerLookUP.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/NodeFT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/PeerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/ChordPeerMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/PeerNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/ChordNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/sample.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/KeySpace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/BootstrapListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/ChordListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/BootstrapMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/ChordMain.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,34 +19,57 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Client/src/PeerNode.java">
+        <entry file="file://$PROJECT_DIR$/server/src/ChordMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
-              <caret line="197" column="34" selection-start-line="197" selection-start-column="31" selection-end-line="197" selection-end-column="34" />
-              <folding>
-                <element signature="e#18479#18480#0" expanded="true" />
-                <element signature="e#18561#18562#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="180">
+              <caret line="17" column="21" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Client/src/test.java">
+        <entry file="file://$PROJECT_DIR$/server/src/ChordListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="901" column="13" selection-start-line="901" selection-start-column="13" selection-end-line="901" selection-end-column="13" />
+            <state relative-caret-position="-195">
+              <caret line="179" column="74" selection-start-line="179" selection-start-column="74" selection-end-line="179" selection-end-column="74" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Client/src/PeerMain.java">
+        <entry file="file://$PROJECT_DIR$/Client/src/ChordPeerMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+            <state relative-caret-position="330">
+              <caret line="79" column="9" lean-forward="true" selection-start-line="79" selection-start-column="9" selection-end-line="79" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Client/src/ChordNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2258">
+              <caret line="53" column="32" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Client/src/KeySpace.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2887">
+              <caret line="877" column="53" selection-start-line="876" selection-start-column="7" selection-end-line="877" selection-end-column="53" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Client/src/NodeFT.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2346">
+              <caret line="605" column="6" selection-start-line="605" selection-start-column="6" selection-end-line="605" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -49,14 +78,67 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>share</find>
-      <find>message is</find>
-      <find>9991</find>
-      <find>upload</find>
+      <find>addfileNames</find>
+      <find>PeerZoneManager</find>
+      <find>PeerDetails</find>
+      <find>PeerFileDownloadListener</find>
+      <find>peerFileDownload</find>
+      <find>peerCheckZone</find>
+      <find>test</find>
+      <find>requestForZone</find>
+      <find>leaveZone</find>
+      <find>getMyZone</find>
+      <find>getZoneIP</find>
+      <find>nearestPeer</find>
+      <find>isInMyZone</find>
+      <find>PeerZoneCheckHandler</find>
+      <find>shareFilesToNewPeer</find>
+      <find>sendToBootStrap</find>
+      <find>PeerFileManager</find>
+      <find>sendPackets</find>
       <find>makePackets</find>
-      <find>upl</find>
-      <find>uploadf</find>
+      <find>NodeLookUp</find>
+      <find>LookUPNodeDesc</find>
+      <find>updateMyLookUP</find>
+      <find>runLookUP</find>
+      <find>setLookUPIP</find>
+      <find>getZone</find>
+      <find>getzonesrt</find>
+      <find>getzoneend</find>
+      <find>getnodeStart</find>
+      <find>getnodeEnd</find>
+      <find>makeMessage</find>
     </findStrings>
+    <replaceStrings>
+      <replace>nodeStart</replace>
+      <replace>nodeEnd</replace>
+      <replace>setMyEndpoint</replace>
+      <replace>addFiles</replace>
+      <replace>KeySpaceManager</replace>
+      <replace>NodeDesc</replace>
+      <replace>FileDownloadListener</replace>
+      <replace>nodeFileDownload</replace>
+      <replace>checkKeySpace</replace>
+      <replace>KeySpace</replace>
+      <replace>keySpaceRequest</replace>
+      <replace>leaveChord</replace>
+      <replace>getKeySpace</replace>
+      <replace>getKeySpaceIP</replace>
+      <replace>nearestNode</replace>
+      <replace>isInMyKeySpace</replace>
+      <replace>KeySpaceHandler</replace>
+      <replace>sendToChordMain</replace>
+      <replace>NodeKeyManager</replace>
+      <replace>packetsToSend</replace>
+      <replace>packetsToCreate</replace>
+      <replace>NodeFT</replace>
+      <replace>FTNodeDesc</replace>
+      <replace>updateMyFT</replace>
+      <replace>runFT</replace>
+      <replace>setFTIP</replace>
+      <replace>getNodeStart</replace>
+      <replace>getNodeEnd</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -64,14 +146,17 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Client/src/PeerNode.java" />
-        <option value="$PROJECT_DIR$/Client/src/test.java" />
+        <option value="$PROJECT_DIR$/server/src/ChordMain.java" />
+        <option value="$PROJECT_DIR$/server/src/ChordListener.java" />
+        <option value="$PROJECT_DIR$/Client/src/KeySpace.java" />
+        <option value="$PROJECT_DIR$/Client/src/NodeLookUp.java" />
+        <option value="$PROJECT_DIR$/Client/src/ChordNode.java" />
+        <option value="$PROJECT_DIR$/Client/src/ChordPeerMain.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="x" value="384" />
-    <option name="width" value="1056" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -92,6 +177,18 @@
               <item name="Client" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="CHORD_DHT" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="KeySpace.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
+            <path>
+              <item name="CHORD_DHT" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="NodeFT.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -101,7 +198,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552463361794" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552508018663" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -115,29 +212,30 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.PeerMain">
-    <configuration name="BootstrapMain" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="BootstrapMain" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/server/src" />
+  <component name="RunManager" selected="Application.ChordPeerMain">
+    <configuration name="ChordMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ChordMain" />
+      <module name="server" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PeerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="PeerMain" />
+    <configuration name="ChordPeerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ChordPeerMain" />
       <module name="Client" />
-      <option name="PROGRAM_PARAMETERS" value="192.168.2.27" />
+      <option name="PROGRAM_PARAMETERS" value="172.21.87.67" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.BootstrapMain" />
-      <item itemvalue="Application.PeerMain" />
+      <item itemvalue="Application.ChordMain" />
+      <item itemvalue="Application.ChordPeerMain" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.PeerMain" />
+        <item itemvalue="Application.ChordPeerMain" />
+        <item itemvalue="Application.ChordMain" />
       </list>
     </recent_temporary>
   </component>
@@ -146,68 +244,93 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0a9d0bd3-5ca2-4675-88cb-fabef8197a2a" name="Default Changelist" comment="" />
-      <created>1552451182177</created>
+      <changelist id="e918f5f2-8c47-4640-941c-8ec928a7882d" name="Default Changelist" comment="" />
+      <created>1552503606451</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1552451182177</updated>
+      <updated>1552503606451</updated>
     </task>
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="751" y="0" width="689" height="900" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Image Layers" />
-      <window_info id="Designer" />
-      <window_info id="UI Designer" />
-      <window_info id="Capture Tool" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18083462" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32950193" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32961586" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3283767" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Palette" />
-      <window_info anchor="right" id="Theme Preview" />
-      <window_info anchor="right" id="Maven" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Palette&#9;" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="bottom" id="Messages" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Maven" order="4" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Capture Analysis" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Client/src/PeerNode.java">
+    <entry file="file://$PROJECT_DIR$/Client/src/sample.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="197" column="34" selection-start-line="197" selection-start-column="31" selection-end-line="197" selection-end-column="34" />
-          <folding>
-            <element signature="e#18479#18480#0" expanded="true" />
-            <element signature="e#18561#18562#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/test.java">
+    <entry file="file://$PROJECT_DIR$/server/src/ChordListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="901" column="13" selection-start-line="901" selection-start-column="13" selection-end-line="901" selection-end-column="13" />
+        <state relative-caret-position="-195">
+          <caret line="179" column="74" selection-start-line="179" selection-start-column="74" selection-end-line="179" selection-end-column="74" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/PeerMain.java">
+    <entry file="file://$PROJECT_DIR$/Client/src/KeySpace.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        <state relative-caret-position="2887">
+          <caret line="877" column="53" selection-start-line="876" selection-start-column="7" selection-end-line="877" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/ChordNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2258">
+          <caret line="53" column="32" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/NodeFT.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2346">
+          <caret line="605" column="6" selection-start-line="605" selection-start-column="6" selection-end-line="605" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/ChordMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="17" column="21" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/ChordPeerMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="79" column="9" lean-forward="true" selection-start-line="79" selection-start-column="9" selection-end-line="79" selection-end-column="9" />
         </state>
       </provider>
     </entry>

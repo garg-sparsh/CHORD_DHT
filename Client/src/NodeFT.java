@@ -9,47 +9,47 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.Arrays;
 
-public class PeerLookUP {
+public class NodeFT {
 	
 	private static final int messageSize = 64;
 	
 	private byte sendData[] = new byte[messageSize];
 	
-	private LookUPPeerDetails[] lookUPPeerDetails;
+	private FTNodeDesc[] FTNodeDesc;
 	
-	private PeerNode peerNode = new PeerNode();
+	private ChordNode chordNode = new ChordNode();
 	
-	public PeerLookUP() {
+	public NodeFT() {
 		
-		lookUPPeerDetails = new LookUPPeerDetails[PeerMain.m];
+		FTNodeDesc = new FTNodeDesc[ChordPeerMain.m];
 		
-		for( int i = 0; i < lookUPPeerDetails.length; i++ ) {
-			lookUPPeerDetails[i] = new LookUPPeerDetails(i);
+		for( int i = 0; i < FTNodeDesc.length; i++ ) {
+			FTNodeDesc[i] = new FTNodeDesc(i);
 		}
 		
 	}
 	
-	public void updateMyLookUP() {
+	public void updateMyFT() {
 		
-		for( int i = 0; i < PeerMain.m; i++ ) {
-			lookUPPeerDetails[i].getIP();
+		for(int i = 0; i < ChordPeerMain.m; i++ ) {
+			FTNodeDesc[i].getIP();
 		}
 		
 	}
 	
 	 
-	public void runLookUP() {
+	public void runFT() {
 		
-		for( int i = 0; i < PeerMain.m; i++ ) {
+		for(int i = 0; i < ChordPeerMain.m; i++ ) {
 			
-			int zoneUpdatingFrom = PeerNode.getMyZoneSrt() - ( (int) Math.pow(2, i) );
+			int zoneUpdatingFrom = ChordNode.getNodeStart() - ( (int) Math.pow(2, i) );
 			if( zoneUpdatingFrom < 0 ) {
-				zoneUpdatingFrom = PeerMain.n + zoneUpdatingFrom;
+				zoneUpdatingFrom = ChordPeerMain.n + zoneUpdatingFrom;
 			}
 			
-			int zoneUpdatingTill = PeerNode.getMyZoneEnd() - ( (int) Math.pow(2, i) );
+			int zoneUpdatingTill = ChordNode.getNodeEnd() - ( (int) Math.pow(2, i) );
 			if( zoneUpdatingTill < 0 ) {
-				zoneUpdatingTill = PeerMain.n + zoneUpdatingTill;
+				zoneUpdatingTill = ChordPeerMain.n + zoneUpdatingTill;
 			}
 			
 			int times;
@@ -58,7 +58,7 @@ public class PeerLookUP {
 				times = zoneUpdatingTill - zoneUpdatingFrom;
 			}
 			else {
-				int times1 = PeerMain.n - zoneUpdatingFrom + 1;
+				int times1 = ChordPeerMain.n - zoneUpdatingFrom + 1;
 				int times2 = zoneUpdatingTill - 0;
 				
 				times = times1 + times2;
@@ -69,13 +69,13 @@ public class PeerLookUP {
 			
 			while( times >= 0 ) {
 				
-				if( zoneUpdating >= PeerNode.getMyZoneSrt() && zoneUpdating <= PeerNode.getMyZoneEnd() ) {
+				if( zoneUpdating >= ChordNode.getNodeStart() && zoneUpdating <= ChordNode.getNodeEnd() ) {
 					
 				}
 				else {	
 		
-					String peerIP = peerNode.getZoneIP(zoneUpdating, PeerNode.getSuccessor().getIP() );
-					String message[] = peerNode.getPeerDetails(peerIP);
+					String peerIP = chordNode.getKeySpaceIP(zoneUpdating, ChordNode.getSuccessor().getIP() );
+					String message[] = chordNode.getNodeDesc(peerIP);
 					
 					String zone[] = message[0].split(" ");
 					int srtZone = Integer.parseInt(zone[0]);
@@ -85,8 +85,8 @@ public class PeerLookUP {
 						
 						while( zoneUpdating != endZone ) {
 							zoneUpdating++;
-							if( zoneUpdating > PeerMain.n - 1 ) {
-								zoneUpdating = zoneUpdating % PeerMain.n;
+							if( zoneUpdating > ChordPeerMain.n - 1 ) {
+								zoneUpdating = zoneUpdating % ChordPeerMain.n;
 							}
 							
 							times--;
@@ -121,8 +121,8 @@ public class PeerLookUP {
 				}
 				
 				zoneUpdating++;
-				if( zoneUpdating > PeerMain.n - 1 ) {
-					zoneUpdating = zoneUpdating % PeerMain.n;
+				if( zoneUpdating > ChordPeerMain.n - 1 ) {
+					zoneUpdating = zoneUpdating % ChordPeerMain.n;
 				}
 				
 				times--;
@@ -134,30 +134,27 @@ public class PeerLookUP {
 		
 	}
 	
-	public void setLookUPIP( String ip, int i ) {
-		lookUPPeerDetails[i].peerIP = ip;
+	public void setFTIP( String ip, int i ) {
+		FTNodeDesc[i].peerIP = ip;
 	}
 
-	public int getZonePos( int i ) {
-		return lookUPPeerDetails[i].zonePos;
-	}
 
 	public int getZone( int i ) {
-		return lookUPPeerDetails[i].zone;
+		return FTNodeDesc[i].zone;
 	}
 	
 	public String getPeerIP( int i ) {
-		return lookUPPeerDetails[i].peerIP;
+		return FTNodeDesc[i].peerIP;
 	}
 	
-	private class LookUPPeerDetails {
+	private class FTNodeDesc {
 		
 		int tableID;
 		int zone;
 		int zonePos;
 		String peerIP;
 		
-		public LookUPPeerDetails( int ID ) {
+		public FTNodeDesc( int ID ) {
 			
 			this.tableID = ID;
 			
@@ -169,37 +166,27 @@ public class PeerLookUP {
 				
 		public void getIP() {
 						
-			zone = PeerNode.getMyZoneEnd() + zonePos;
+			zone = ChordNode.getNodeEnd() + zonePos;
 			
-			if( zone > PeerMain.n - 1 ) {
-				zone = zone % PeerMain.n;
+			if( zone > ChordPeerMain.n - 1 ) {
+				zone = zone % ChordPeerMain.n;
 			}
 			
-			if( zone >= PeerNode.getMyZoneSrt() && zone <= PeerNode.getMyZoneEnd() ) {
-				peerIP = PeerNode.getMyIP();
+			if( zone >= ChordNode.getNodeStart() && zone <= ChordNode.getNodeEnd() ) {
+				peerIP = ChordNode.getMyIP();
 			}
 			else {
-				peerIP = peerNode.getZoneIP(zone, PeerNode.getSuccessor().getIP() );	
+				peerIP = chordNode.getKeySpaceIP(zone, ChordNode.getSuccessor().getIP() );
 			}
 			
 		}
 		
 	}
-	
-	/*private void makeMessage(String message) {
-		
-		Arrays.fill(sendData, 0, messageSize, (byte) 0);
-		byte messageByte[] = message.getBytes();
-		ByteBuffer byteBuffer = ByteBuffer.wrap(sendData);
-		byteBuffer.position(0);
-		byteBuffer.put(messageByte);
-		sendData = byteBuffer.array();
-	
-	}*/
+
 	
 }
 
-class PeerLookUpUpdate extends Thread {
+class NodeFTUpdate extends Thread {
 
 	private static final int messageSize = 64;
 
@@ -210,7 +197,7 @@ class PeerLookUpUpdate extends Thread {
 	private boolean isServerRunning;
 
 	// constructor
-	public PeerLookUpUpdate() {
+	public NodeFTUpdate() {
 
 		try {
 			isServerRunning = true;
@@ -241,7 +228,7 @@ class PeerLookUpUpdate extends Thread {
 	}
 
 	/**
-	 * The class is a support class for PeerLookUpUpdate
+	 * The class is a support class for NodeFTUpdate
 	 */
 	private class PeerLookUpUpdateHandler extends Thread {
 
@@ -270,7 +257,7 @@ class PeerLookUpUpdate extends Thread {
 
 				int message = Integer.parseInt(new String(recvData).trim());
 
-				PeerNode.peerLookUP.setLookUPIP(clientIP, message);
+				ChordNode.NodeFT.setFTIP(clientIP, message);
 
 				socket.close();
 			} catch (IOException e) {
@@ -295,14 +282,14 @@ class PeerLookUpUpdate extends Thread {
 }
 
 
-class PeerNeighbour {
+class Neighbour {
 
 	private String ip;
 	private int zoneSrt;
 	private int zoneEnd;
 
 	// constructor
-	public PeerNeighbour(String ip, int zoneSrt, int zoneEnd) {
+	public Neighbour(String ip, int zoneSrt, int zoneEnd) {
 
 		this.ip = ip;
 		this.zoneSrt = zoneSrt;
@@ -328,18 +315,18 @@ class PeerNeighbour {
 	}
 
 	// getter for start zone
-	public int getZoneSrt() {
+	public int getNodeStart() {
 		return zoneSrt;
 	}
 
 	// geter for end zone
-	public int getZoneEnd() {
+	public int getNodeEnd() {
 		return zoneEnd;
 	}
 
 }
 
-class PeerNeighbourUpdate extends Thread {
+class NeighbourUpdate extends Thread {
 
 	private static final int messageSize = 64;
 
@@ -348,7 +335,7 @@ class PeerNeighbourUpdate extends Thread {
 	private boolean isServerRunning;
 
 	// constructor
-	public PeerNeighbourUpdate() {
+	public NeighbourUpdate() {
 
 		try {
 			serverSocket = new ServerSocket(9992);
@@ -396,7 +383,7 @@ class PeerNeighbourUpdate extends Thread {
 
 	/**
 	 *
-	 * The class is a supporter class for PeerNeighbourUpdate.
+	 * The class is a supporter class for NeighbourUpdate.
 	 *
 	 */
 	private class PeerNeighbourUpdateHandler extends Thread {
@@ -427,9 +414,9 @@ class PeerNeighbourUpdate extends Thread {
 				String message[] = new String(recvData).trim().split(" ");
 
 				if (new String(recvData).trim().contains("predecessor")) {
-					PeerNode.setPredecessor(clientIP, Integer.parseInt(message[1]), Integer.parseInt(message[2]));
+					ChordNode.setPredecessor(clientIP, Integer.parseInt(message[1]), Integer.parseInt(message[2]));
 				} else if (new String(recvData).trim().contains("successor")) {
-					PeerNode.setSuccessor(clientIP, Integer.parseInt(message[1]), Integer.parseInt(message[2]));
+					ChordNode.setSuccessor(clientIP, Integer.parseInt(message[1]), Integer.parseInt(message[2]));
 				}
 
 				socket.close();
@@ -442,13 +429,13 @@ class PeerNeighbourUpdate extends Thread {
 
 }
 
-class PeerTransmitterListener extends Thread {
+class TransferListener extends Thread {
 	//data members to read and send the file
 	private static final int messageSize = 1024;
 
 	private ServerSocket serverSocket;
 
-	PeerNode peerNode = new PeerNode();
+	ChordNode chordNode = new ChordNode();
 	private boolean isServerRunning;
 	Socket socket;
 
@@ -463,7 +450,7 @@ class PeerTransmitterListener extends Thread {
 	/**
 	 * constructor of the class
 	 */
-	public PeerTransmitterListener() {
+	public TransferListener() {
 
 		try {
 			serverSocket = new ServerSocket(9485);
@@ -538,18 +525,18 @@ class PeerTransmitterListener extends Thread {
 
 				String data = new String(recvData).trim();
 				System.out.println("File name requested :" + data);
-				if (peerNode.isFileOwner(data)) {
+				if (chordNode.isFileOwner(data)) {
 					filePath = data;
 					readFileToTransmit();
-					makePackets();
-					sendPackets();
+					packetsToCreate();
+					packetsToSend();
 
 				} else {
 					data = "NoSuchFile";
 					sendData = data.getBytes();
 					dataOutputStream.write(sendData);
 				}
-				PeerNode.printOptionsMenu();
+				ChordNode.printOptionsMenu();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -558,7 +545,7 @@ class PeerTransmitterListener extends Thread {
 		/**
 		 * method to send the file packets
 		 */
-		private void sendPackets() {
+		private void packetsToSend() {
 			try {
 
 				DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -584,7 +571,7 @@ class PeerTransmitterListener extends Thread {
 		 */
 		private void readFileToTransmit() {
 
-			file = new File(String.valueOf(PeerNode.getMyIP() + "/" + peerNode.hash(filePath)));
+			file = new File(String.valueOf(ChordNode.getMyIP() + "/" + chordNode.hash(filePath)));
 			try {
 				fileInBytes = Files.readAllBytes(file.toPath());
 			} catch (IOException e) {
@@ -598,7 +585,7 @@ class PeerTransmitterListener extends Thread {
 		/**
 		 * method to make file to be sent as packets
 		 */
-		private void makePackets() {
+		private void packetsToCreate() {
 
 			fileSize = file.length();
 			totalPackets = (int) Math.ceil(fileSize / (double) messageSize);

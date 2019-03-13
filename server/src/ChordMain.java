@@ -3,10 +3,10 @@ import java.io.IOException;
 
 /**
  *
- * The class BootstrapMain is the main class for Bootstrap
+ * The class ChordMain is the main class for Bootstrap
  *
  */
-public class BootstrapMain 
+public class ChordMain
 {
 	
 	private static final int n = 128;
@@ -15,11 +15,11 @@ public class BootstrapMain
 	// main program
 	public static void main(String args[]) throws IOException {
 				
-		BootstrapListener bootstrapListener = new BootstrapListener();
-		bootstrapListener.start();
+		ChordListener chordListener = new ChordListener();
+		chordListener.start();
 		
-		BootstrapEntryListener bootstrapEntryListener = new BootstrapEntryListener();
-		bootstrapEntryListener.start();
+		ChordEntryListener chordEntryListener = new ChordEntryListener();
+		chordEntryListener.start();
 		
 	}
 
