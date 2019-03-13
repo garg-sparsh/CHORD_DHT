@@ -337,7 +337,6 @@ class KeySpaceManager extends Thread {
         }
 
         private void shareFilesToNewPeer() {
-            System.out.println("Files are going to shared with new peer!!!!!!");
             NodeKeyManager fileManager = new NodeKeyManager();
             List<String> deleteList = new ArrayList<>();
 

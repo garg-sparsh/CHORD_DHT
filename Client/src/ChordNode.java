@@ -192,9 +192,9 @@ public class ChordNode {
 	{
 		System.out.println("Choose an option:");
 		System.out.println("1 - Finger Table Details ");
-		System.out.println("2 - Leave chord zone ");
-		System.out.println("3 - Upload File to zone ");
-		System.out.println("4 - Download File from zone ");
+		System.out.println("2 - Leave chord ");
+		System.out.println("3 - Upload File ");
+		System.out.println("4 - Download File ");
 		System.out.println("5 - Files present at this node ");
 
 		System.out.print("Your input - ");
