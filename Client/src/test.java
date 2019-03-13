@@ -761,6 +761,7 @@ class PeerFileManager extends Thread {
             sendToIP = peerNode.getZoneIP(sendZoneTo, peerNode.nearestPeer(sendZoneTo));
             makePackets();
             sendPackets();
+            System.out.println("Upload complete!");
         }
         else{
             System.out.println(filePath+" is not available please try again");

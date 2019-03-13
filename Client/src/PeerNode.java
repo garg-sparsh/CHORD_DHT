@@ -196,7 +196,6 @@ public class PeerNode {
 				filePath = scanner.nextLine();
 				PeerFileManager peerFileUpload = new PeerFileManager();
 				peerFileUpload.uploadFile(filePath, false);
-				System.out.println("Upload complete. Yay!");
 				break;
 			case 4://Option to download file from chord zone
 				System.out.print("Enter the file name for download");
