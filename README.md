@@ -17,6 +17,7 @@ Steps to run the program:
 5. Run Server: java ChordMain
 6. Run peer nodes on other available machines: java ChordPeerMain <IP of server>
 7. Choose one of the 5 actions to perform on each of the node:
+  
         - 1 - Finger Table Details
         - 2 - Leave chord
         - 3 - Upload File
@@ -25,14 +26,18 @@ Steps to run the program:
 
 9. if user selects 1:
         Displays finger table for the current node
+        
    if user selects 2:
         Node will be removed from the chord and all the files it possess will be transferred to it’s predecessor
-        However, if the node is an entry point, leader election occurs and its predecessor is assigned as chord’s new entry point
-   if user selects 3:
+        However, if the node is an entry point, leader election occurs and its predecessor is assigned as chord’s new entry           point
+   
+   if user selects 3:
         User will be prompted to upload a file from the node [Example: /home/WebServices-Tutorial.pdf]
-   if user selects 4:
-        User will be prompted to enter file name that user wants to be downloaded in the current node
+   
+   if user selects 4:
+        User will be prompted to enter file name that user wants to be downloaded in the current node
         [Example: WebServices- Tutorial.pdf]
+        
    if user selects 5:
         Lists all the files available at the current node.
 
