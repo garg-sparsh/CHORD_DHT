@@ -6,68 +6,60 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-
+//The class is used to checks if the keyspace  which gets requested from a node has the
+// same key space, to maintain the consistency multiple threads gets created.
 public class KeySpace extends Thread {
 
-    private static final int messageSize = 64;
-
-    private ServerSocket serverSocket;
+    private ServerSocket nodePortSocket;
 
     ChordNode chordNode = new ChordNode();
-    private boolean isServerRunning;
+    private boolean isNodePortSocketRunning;
     Socket socket;
 
     // constructor
     public KeySpace() {
 
         try {
-            serverSocket = new ServerSocket(9990);
-            isServerRunning = true;
+            nodePortSocket = new ServerSocket(Constant.CONNECT_NODE_PORT);
+            isNodePortSocketRunning = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     // thread starts
     public void run() {
 
-        while( isServerRunning ) {
+        while( isNodePortSocketRunning ) {
 
             try {
-
-                socket = serverSocket.accept();
-
+                socket = nodePortSocket.accept();
                 new KeySpaceHandler(socket).start();
 
             } catch (IOException e) {
-
+                e.printStackTrace();
             }
-
         }
-
-
     }
 
-    /**
-     * stops the serverSocket
-     */
+   //stops the nodePortSocket
     public void stopServer()
     {
         try {
-            serverSocket.close();
+            nodePortSocket.close();
         } catch (IOException e) {
 
         }
-        isServerRunning = false;
+        isNodePortSocketRunning = false;
     }
 
+    //helper class of KeySpace as it gets back to the node with results after investigating the keyspace
     private class KeySpaceHandler extends Thread {
 
         Socket socket;
 
-        byte sendData[] = new byte[messageSize];
-        byte recvData[] = new byte[messageSize];
+        byte recvData[] = new byte[Constant.MESSAGE_SIZE];
+        byte sendData[] = new byte[Constant.MESSAGE_SIZE];
 
         // constructor
         public KeySpaceHandler(Socket socket) {
@@ -75,24 +67,21 @@ public class KeySpace extends Thread {
             this.socket = socket;
 
         }
-
         // thread starts
         public void run() {
 
             try {
-
-                int messagePos = 0;
 
                 DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
                 DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
                 dataInputStream.read(recvData, 0, recvData.length);
 
-                int zoneQuery = Integer.parseInt( new String( recvData ).trim() );
+                int query = Integer.parseInt( new String( recvData ).trim() );
 
-                if( zoneQuery >= ChordNode.getNodeStart() && zoneQuery <= ChordNode.getNodeEnd() ) {
+                if( query >= ChordNode.getNodeStart() && query <= ChordNode.getNodeEnd() ) {
                     MakeMessage makeMessage = new MakeMessage();
-                    sendData = makeMessage.message_creation(sendData, messageSize, "isMyZone", messagePos);
+                    sendData = makeMessage.message_creation(sendData, Constant.MESSAGE_SIZE, "isInMySpace");
                     dataOutputStream.write(sendData);
                     dataOutputStream.flush();
                 }
@@ -100,15 +89,15 @@ public class KeySpace extends Thread {
 
                     String nearestIP;
 
-                    if( zoneQuery >= ChordNode.getPredecessor().getNodeStart() &&
-                            zoneQuery <= ChordNode.getPredecessor().getNodeEnd() ) {
+                    if( query >= ChordNode.getPredecessor().getNodeStart() &&
+                            query <= ChordNode.getPredecessor().getNodeEnd() ) {
                         nearestIP = ChordNode.getPredecessor().getIP();
                     }
                     else {
-                        nearestIP = chordNode.nearestNode(zoneQuery);
+                        nearestIP = chordNode.nearestNode(query);
                     }
                     MakeMessage makeMessage = new MakeMessage();
-                    sendData = makeMessage.message_creation(sendData, messageSize, nearestIP, messagePos);
+                    sendData = makeMessage.message_creation(sendData, Constant.MESSAGE_SIZE, nearestIP);
                     dataOutputStream.write(sendData);
                     dataOutputStream.flush();
                 }
@@ -125,9 +114,10 @@ public class KeySpace extends Thread {
 
 }
 
+//The class is used to get the details of the node.
+// Details like keyspace start, keyspace end, predeccessor, successor and entrypoint details
+// multithreading has been implemented to maintain the consistency
 class NodeDesc extends Thread {
-
-    private static final int messageSize = 1024;
 
     private ServerSocket serverSocket;
     private boolean isServerRunning;
@@ -138,7 +128,7 @@ class NodeDesc extends Thread {
 
         try {
             isServerRunning = true;
-            serverSocket = new ServerSocket(9993);
+            serverSocket = new ServerSocket(Constant.NEIGHBOUR_lISTENER);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -182,7 +172,7 @@ class NodeDesc extends Thread {
 
         String clientIP;
 
-        byte sendData[] = new byte[messageSize];
+        byte sendData[] = new byte[Constant.FILE_MSG_SIZE];
 
         // // constructor
         public NodeDescHandler(Socket socket) {
@@ -207,15 +197,15 @@ class NodeDesc extends Thread {
                 String message4 = new String("");
                 String message5 = ChordNode.isEntryPoint.toString() + "\n";
 
-                for (int i = 0; i < ChordPeerMain.m; i++) {
-                    if (i != ChordPeerMain.m - 1) {
+                for (int i = 0; i < Constant.M; i++) {
+                    if (i !=Constant.M - 1) {
                         message4 = message4 + ChordNode.NodeFT.getPeerIP(i) + " ";
                     } else {
                         message4 = message4 + ChordNode.NodeFT.getPeerIP(i) + "\n";
                     }
                 }
                 MakeMessage makeMessage = new MakeMessage();
-                sendData = makeMessage.message_creation(sendData, messageSize, message1 + message2 + message3 + message4 + message5);
+                sendData = makeMessage.message_creation(sendData, Constant.FILE_MSG_SIZE, message1 + message2 + message3 + message4 + message5);
                 dataOutputStream.write(sendData);
                 dataOutputStream.flush();
 
@@ -231,9 +221,8 @@ class NodeDesc extends Thread {
 
 }
 
+//This class is used to perform the add and join the leave of the nodes in the chord network
 class KeySpaceManager extends Thread {
-    //data members of the class
-    private static final int messageSize = 64;
 
     private ServerSocket serverSocket;
 
@@ -241,22 +230,18 @@ class KeySpaceManager extends Thread {
 
     private boolean isServerRunning;
     Socket socket;
-    /**
-     * constructor of the class to accept server request
-     */
+
     public KeySpaceManager() {
 
         try {
-            serverSocket = new ServerSocket(9991);
+            serverSocket = new ServerSocket(Constant.KEY_SPACE_MANAGER_PORT);
             isServerRunning = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-    /**
-     * method to handle thread of the class
-     */
+
     public void run() {
 
         while (isServerRunning) {
@@ -273,9 +258,7 @@ class KeySpaceManager extends Thread {
         }
 
     }
-    /**
-     * method to stop the class thread
-     */
+
     public void stopServer() {
         try {
             serverSocket.close();
@@ -291,12 +274,9 @@ class KeySpaceManager extends Thread {
 
         String clientIP;
 
-        byte sendData[] = new byte[messageSize];
-        byte recvData[] = new byte[messageSize];
-        /**
-         * constructor to handle the accepted threads
-         * @param socket
-         */
+        byte sendData[] = new byte[Constant.MESSAGE_SIZE];
+        byte recvData[] = new byte[Constant.MESSAGE_SIZE];
+
         public KeySpaceManagerHandler(Socket socket) {
 
             this.socket = socket;
@@ -319,7 +299,7 @@ class KeySpaceManager extends Thread {
                     add(dataOutputStream);
 
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(Constant.THREAD_SLEEP_TIME);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -336,6 +316,8 @@ class KeySpaceManager extends Thread {
             }
         }
 
+        //method which checks files at the original location if they fall in the keyspace
+        // of the newly created node and then share those files with that nde
         private void shareFilesToNewPeer() {
             NodeKeyManager fileManager = new NodeKeyManager();
             List<String> deleteList = new ArrayList<>();
@@ -344,7 +326,7 @@ class KeySpaceManager extends Thread {
             {
                 System.out.println("FILE:"+fileName);
                 if(!chordNode.isInMyKeySpace(chordNode.hash(fileName))) {
-                    System.out.println("FILE In ZONE:"+fileName);
+                    System.out.println("FILE at Node:"+fileName);
                     fileManager.uploadFile_new_peer(fileName, true);
                     deleteList.add(fileName);
                 }
@@ -355,6 +337,7 @@ class KeySpaceManager extends Thread {
 
         }
 
+        //update details when the chord leaves. Details include: Finger table, predecessor, successor and keyspace
         private void leave(DataOutputStream dataOutputStream) throws IOException {
 
             String NodeDesc[] = chordNode.getNodeDesc(clientIP);
@@ -367,12 +350,12 @@ class KeySpaceManager extends Thread {
                 ChordNode.isEntryPoint = true;
                 sendToChordMain();
 
-                String zone[] = NodeDesc[2].split(" ");
+                String key[] = NodeDesc[2].split(" ");
 
                 ChordNode.setMyEndpoint(  ChordNode.getNodeStart() , ChordNode.getSuccessor().getNodeEnd());
-                ChordNode.setSuccessor(zone[0], Integer.parseInt(zone[1]), Integer.parseInt(zone[2]));
+                ChordNode.setSuccessor(key[0], Integer.parseInt(key[1]), Integer.parseInt(key[2]));
 
-                if(zone[0].contains(ChordNode.getMyIP()))
+                if(key[0].contains(ChordNode.getMyIP()))
                 {
                     ChordNode.setSuccessor(ChordNode.getMyIP(), ChordNode.getNodeStart(), ChordNode.getNodeEnd());
                     ChordNode.setPredecessor(ChordNode.getMyIP(), ChordNode.getNodeStart(), ChordNode.getNodeEnd());
@@ -382,12 +365,12 @@ class KeySpaceManager extends Thread {
             }
             else {
 
-                String zone[] = NodeDesc[1].split(" ");
+                String key[] = NodeDesc[1].split(" ");
 
                 ChordNode.setMyEndpoint(  ChordNode.getPredecessor().getNodeStart() , ChordNode.getNodeEnd());
-                ChordNode.setPredecessor(zone[0], Integer.parseInt(zone[1]), Integer.parseInt(zone[2]));
+                ChordNode.setPredecessor(key[0], Integer.parseInt(key[1]), Integer.parseInt(key[2]));
 
-                if(zone[0].contains(ChordNode.getMyIP()))
+                if(key[0].contains(ChordNode.getMyIP()))
                 {
 
                     ChordNode.setSuccessor(ChordNode.getMyIP(), ChordNode.getNodeStart(), ChordNode.getNodeEnd());
@@ -405,7 +388,7 @@ class KeySpaceManager extends Thread {
             ChordNode.NodeFT.updateMyFT();
 
             MakeMessage makeMessage = new MakeMessage();
-            sendData = makeMessage.message_creation(sendData, messageSize, "Confirmed");
+            sendData = makeMessage.message_creation(sendData, Constant.MESSAGE_SIZE, "Confirmed");
 
             dataOutputStream.write(sendData);
             dataOutputStream.flush();
@@ -413,17 +396,19 @@ class KeySpaceManager extends Thread {
 
         }
 
+        //send details about entry point to server
         private void sendToChordMain() throws IOException {
-            Socket entrySocket = new Socket(  ChordPeerMain.serverIP, 8881 );
+            Socket entrySocket = new Socket(  ChordPeerMain.serverIP, Constant.ENTRY_lISTENER_PORT );
             DataOutputStream entryOutputStream = new DataOutputStream(entrySocket.getOutputStream());
 
             MakeMessage makeMessage = new MakeMessage();
-            sendData = makeMessage.message_creation(sendData, messageSize, ChordNode.getMyIP());
+            sendData = makeMessage.message_creation(sendData, Constant.MESSAGE_SIZE, ChordNode.getMyIP());
             entryOutputStream.write(sendData);
             entryOutputStream.flush();
             entrySocket.close();
         }
 
+        //joins new node to the ring
         private void add(DataOutputStream dataOutputStream) throws IOException {
             int midPoint = ChordNode.getNodeStart() + ((ChordNode.getNodeEnd() - ChordNode.getNodeStart()) / 2);
 
@@ -441,7 +426,7 @@ class KeySpaceManager extends Thread {
                         ChordNode.getMyIP() + " " + ChordNode.getNodeStart() + " " + ChordNode.getNodeEnd();
 
                 MakeMessage makeMessage = new MakeMessage();
-                sendData = makeMessage.message_creation(sendData, messageSize, message1 + message2);
+                sendData = makeMessage.message_creation(sendData, Constant.MESSAGE_SIZE, message1 + message2);
 
             } else {
 
@@ -454,7 +439,7 @@ class KeySpaceManager extends Thread {
                 String message2 = ChordNode.getMyIP() + " " + ChordNode.getNodeStart() + " " + ChordNode.getNodeEnd();
 
                 MakeMessage makeMessage = new MakeMessage();
-                sendData = makeMessage.message_creation(sendData, messageSize, message1 + message2);
+                sendData = makeMessage.message_creation(sendData, Constant.MESSAGE_SIZE, message1 + message2);
 
                 chordNode.sendNeighbourUpdate(ChordNode.getSuccessor().getIP(), 0);
 
@@ -471,9 +456,9 @@ class KeySpaceManager extends Thread {
 
 }
 
+// this class is responsible for downloading the requested files from the node which has that
+// file . If multiple nodes have the same file then it will pick that from the nearest IP(node).
 class FileDownloadListener extends Thread {
-    //data members of the class
-    private static final int messageSize = 1024;
 
     private ServerSocket serverSocket;
 
@@ -481,22 +466,18 @@ class FileDownloadListener extends Thread {
     private boolean isServerRunning;
     Socket socket;
     private byte fileInPackets[][];
-    /**
-     * constructor to handle the server request
-     */
+
     public FileDownloadListener() {
 
         try {
-            serverSocket = new ServerSocket(9495);
+            serverSocket = new ServerSocket(Constant.UPLOAD_PORT);
             isServerRunning = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-    /**
-     * method to handle the thread of the class
-     */
+
     public void run() {
 
         while( isServerRunning ) {
@@ -515,9 +496,7 @@ class FileDownloadListener extends Thread {
 
 
     }
-    /**
-     * method stop the server
-     */
+    //stop server
     public void stopServer()
     {
         try {
@@ -529,23 +508,18 @@ class FileDownloadListener extends Thread {
     }
 
     private class FileDownloadHandler extends Thread {
-        //data members of the class
+
         Socket socket;
 
-        byte sendData[] = new byte[messageSize];
-        byte recvData[] = new byte[messageSize];
-        /**
-         * constructor of the class
-         * @param socket
-         */
+        byte sendData[] = new byte[Constant.FILE_MSG_SIZE];
+        byte recvData[] = new byte[Constant.FILE_MSG_SIZE];
+
         public FileDownloadHandler(Socket socket) {
 
             this.socket = socket;
 
         }
-        /**
-         * method to handle the thread of the class
-         */
+
         public void run() {
 
             try {
@@ -561,18 +535,18 @@ class FileDownloadListener extends Thread {
 
                 chordNode.addFiles(fileDetails[0]);
                 int totalPackets=Integer.parseInt(fileDetails[1]);
-                fileInPackets=new byte[totalPackets][messageSize];
+                fileInPackets=new byte[totalPackets][Constant.FILE_MSG_SIZE];
                 for(int i =0;i<totalPackets;i++)
                 {
                     dataInputStream.read(recvData,0,recvData.length);
-                    System.arraycopy(recvData, 0 ,fileInPackets[i], 0, messageSize);
+                    System.arraycopy(recvData, 0 ,fileInPackets[i], 0, Constant.FILE_MSG_SIZE);
 
                 }
                 fileWrite(fileDetails[0],totalPackets);
 
                 System.out.println("Download Complete.");
 
-                ChordNode.printOptionsMenu();
+                ChordNode.menu();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -622,15 +596,14 @@ class FileDownloadListener extends Thread {
 
 }
 
-
+//this class is used to take care of all the requests generated for uploading and downloading the file
 class NodeKeyManager extends Thread {
-    //data member of the class
-    private static final int messageSize = 1024;
+
     private File file;
     private static String filePath;
     private long fileSize;
     private int totalPackets;
-    private byte[] sendData = new byte[messageSize];
+    private byte[] sendData = new byte[Constant.FILE_MSG_SIZE];
     private byte fileInBytes[];
     private byte fileInPackets[][];
 
@@ -639,15 +612,13 @@ class NodeKeyManager extends Thread {
     Socket socket;
 
     String sendToIP;
-    int sendPortTo = 9495;
-    int sendZoneTo;
+    int sendPortTo = Constant.UPLOAD_PORT;
+    int sendKeyValue;
 
     String recvIPFrom;
-    int recvPortFrom = 9485;
-    int recvZoneFrom;
-    /**
-     * contructor of the class
-     */
+    int recvPortFrom = Constant.DOWNLOAD_PORT;
+    int receiveKeyValueFrom;
+
     public NodeKeyManager() {
 
     }
@@ -657,33 +628,33 @@ class NodeKeyManager extends Thread {
         if(isFileAvailable(path)){
             String arr[] = path.split("/");
             String filePath_name = arr[arr.length-1];
-            sendZoneTo = chordNode.hash(filePath_name);
-            System.out.println("File sending to zone :" + sendZoneTo);
+            sendKeyValue = chordNode.hash(filePath_name);
+            System.out.println("File sending to node :" + sendKeyValue);
             if(!share)
                 readFile(!share);
             else
                 readFile(share);
-            sendToIP = chordNode.getKeySpaceIP(sendZoneTo, chordNode.nearestNode(sendZoneTo));
+            sendToIP = chordNode.getKeySpaceIP(sendKeyValue, chordNode.nearestNode(sendKeyValue));
             packetsToCreate();
             packetsToSend();
             System.out.println("Upload complete!");
         }
         else{
             System.out.println(filePath+" is not available please try again");
-            ChordNode.printOptionsMenu();
+            ChordNode.menu();
         }
 
     }
 
     public void uploadFile_new_peer(String path, boolean share) {
         filePath = path;
-        sendZoneTo = chordNode.hash(filePath);
-        System.out.println("File sending to zone :" + sendZoneTo);
+        sendKeyValue = chordNode.hash(filePath);
+        System.out.println("File sending to key :" + sendKeyValue);
         if(!share)
             readFile(!share);
         else
             readFile(share);
-        sendToIP = chordNode.getKeySpaceIP(sendZoneTo, chordNode.nearestNode(sendZoneTo));
+        sendToIP = chordNode.getKeySpaceIP(sendKeyValue, chordNode.nearestNode(sendKeyValue));
         packetsToCreate();
         packetsToSend();
         System.out.println("Upload complete!");
@@ -698,16 +669,15 @@ class NodeKeyManager extends Thread {
 
     public void downloadFile(String filePath) throws IOException {
         System.out.println("Download request formed for file :" + filePath);
-//        filePath = "../"+ChordNode.getMyIP()+filePath;
-        recvZoneFrom = chordNode.hash(filePath);
-        System.out.println("Requesting file from zone: " + recvZoneFrom);
-        recvIPFrom = chordNode.getKeySpaceIP(recvZoneFrom, chordNode.nearestNode(recvZoneFrom));
+        receiveKeyValueFrom = chordNode.hash(filePath);
+        System.out.println("Requesting file from key: " + receiveKeyValueFrom);
+        recvIPFrom = chordNode.getKeySpaceIP(receiveKeyValueFrom, chordNode.nearestNode(receiveKeyValueFrom));
         socket = new Socket(recvIPFrom, recvPortFrom);
 
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
         DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
 
-        byte recvData[] = new byte[messageSize];
+        byte recvData[] = new byte[Constant.FILE_MSG_SIZE];
         File file = new File(ChordNode.getMyIP());
         if(!file.exists())
             file.mkdirs();
@@ -721,10 +691,10 @@ class NodeKeyManager extends Thread {
 
             chordNode.addFiles(fileDetails[0]);
             int totalPackets = Integer.parseInt(fileDetails[1]);
-            fileInPackets = new byte[totalPackets][messageSize];
+            fileInPackets = new byte[totalPackets][Constant.FILE_MSG_SIZE];
             for (int i = 0; i < totalPackets; i++) {
                 dataInputStream.read(recvData, 0, recvData.length);
-                System.arraycopy(recvData, 0, fileInPackets[i], 0, messageSize);
+                System.arraycopy(recvData, 0, fileInPackets[i], 0, Constant.FILE_MSG_SIZE);
 
             }
             FileOutputStream fos = new FileOutputStream(String.valueOf(chordNode.hash(fileDetails[0])));
@@ -744,7 +714,7 @@ class NodeKeyManager extends Thread {
         }
         else{
             System.out.println(filePath+" not available");
-            ChordNode.printOptionsMenu();
+            ChordNode.menu();
         }
     }
 
@@ -755,7 +725,7 @@ class NodeKeyManager extends Thread {
             System.out.println("totalPackets:"+totalPackets);
             String data = new String(new File(filePath).getName() + " " + totalPackets + " ");
             MakeMessage makeMessage = new MakeMessage();
-            sendData = makeMessage.message_creation(sendData, messageSize, data);
+            sendData = makeMessage.message_creation(sendData, Constant.FILE_MSG_SIZE, data);
             dataOutputStream.write(sendData);
 
             dataOutputStream.flush();
@@ -806,13 +776,13 @@ class NodeKeyManager extends Thread {
     private void packetsToCreate() {
 
         fileSize = file.length();
-        totalPackets = (int) Math.ceil(fileSize / (double) messageSize);
+        totalPackets = (int) Math.ceil(fileSize / (double) Constant.FILE_MSG_SIZE);
 
-        fileInPackets = new byte[totalPackets][messageSize];
+        fileInPackets = new byte[totalPackets][Constant.FILE_MSG_SIZE];
         for (int i = 0; i < totalPackets - 1; i++)
-            System.arraycopy(fileInBytes, i * messageSize, fileInPackets[i], 0, messageSize);
-        System.arraycopy(fileInBytes, (totalPackets - 1) * messageSize, fileInPackets[totalPackets - 1], 0,
-                (int) fileSize - (totalPackets - 1) * 1024);
+            System.arraycopy(fileInBytes, i * Constant.FILE_MSG_SIZE, fileInPackets[i], 0, Constant.FILE_MSG_SIZE);
+        System.arraycopy(fileInBytes, (totalPackets - 1) * Constant.FILE_MSG_SIZE, fileInPackets[totalPackets - 1], 0,
+                (int) fileSize - (totalPackets - 1) * Constant.FILE_MSG_SIZE);
 
     }
 

@@ -3,11 +3,7 @@ import java.io.IOException;
 
 public class ChordMain
 {
-	
-	private static final int n = 128;
-	private static final int m = 7;
-
-	// main program
+	// main program to start the server.
 	public static void main(String args[]) throws IOException {
 				
 		ChordListener chordListener = new ChordListener();
@@ -17,15 +13,4 @@ public class ChordMain
 		chordEntryListener.start();
 		
 	}
-
-	// getter for m
-	public static int getM() {
-		return m;
-	}
-
-	// setter for n
-	public static int getN() {
-		return n;
-	}
-	
 }

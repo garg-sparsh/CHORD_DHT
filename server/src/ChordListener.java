@@ -7,10 +7,9 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Random;
 
+//Listens for peers to join the network. Thread used to handle multiple client requests
 public class ChordListener extends Thread {
-	
-	private static final int messageSize = 64;
-	
+
 	private Random random = new Random(); 
 	private ServerSocket serverSocket ;
 	private Socket socket;
@@ -22,7 +21,7 @@ public class ChordListener extends Thread {
 		try {
 			
 			chordIP = new String("");
-			serverSocket = new ServerSocket(8880);
+			serverSocket = new ServerSocket(Constant.SERVER_PORT);
 			
 		}
 		catch( Exception e ) {
@@ -37,7 +36,7 @@ public class ChordListener extends Thread {
 		try {
 			
 			while( true ) {
-				System.out.println("Chord listener running");
+				System.out.println("Server listener running");
 				socket = serverSocket.accept();
 			
 				new ChordHandler( socket ).start();
@@ -49,10 +48,12 @@ public class ChordListener extends Thread {
 		}
 	}
 
+	//generates a random number to hash IP address of the peer joining the system and
+	// sends the node number and entry pt details to the peer
 	private class ChordHandler extends Thread {
 
 		Socket socket;
-		byte[] sendByte=new byte[messageSize];
+		byte[] sendByte=new byte[Constant.MESSAGE_SIZE];
 
 		// constructor
 		public ChordHandler( Socket socket ) {
@@ -67,21 +68,21 @@ public class ChordListener extends Thread {
 			try {
 				
 				DataOutputStream dataOutputStream = new DataOutputStream( socket.getOutputStream() );
-				
-				int zonePos;
-				int messagePos = 0;
-				
-				zonePos = random.nextInt(ChordMain.getN() - 2) + 1;
-				
-				if( chordIP.equals("") ) {
 
-					makeMessage(zonePos + " " + "isEntryPoint", messagePos);
-					chordIP = socket.getInetAddress().toString();
-					chordIP = chordIP.substring(1, chordIP.length());
-					System.out.println("Chord Entry Point set - " + chordIP);
+				int nodeNumber;
+				nodeNumber = random.nextInt(Constant.N - 2) + 1;
+
+				//If initial chordIP is empty will set the peer Id as entry point.
+				// Else will send entry pt details to new peers joining the ring
+				if( chordIP.equals("") )
+				{
+					makeMessage(nodeNumber + " " + "isEntryPoint");
+
+					chordIP = socket.getInetAddress().toString().substring(1, chordIP.length());
+					System.out.println(chordIP+" is the entry point");
 				}
 				else {
-					makeMessage(zonePos + " " + chordIP, messagePos);
+					makeMessage(nodeNumber + " " + chordIP);
 				}
 				
 				dataOutputStream.write(sendByte);
@@ -94,13 +95,13 @@ public class ChordListener extends Thread {
 			
 		}
 
-		// wraps message into the sendByte
-		private void makeMessage(String message, int pos) {
+		// wraps message from string to bytes
+		private void makeMessage(String message) {
 			
-			Arrays.fill(sendByte, 0, messageSize, (byte) 0);
+			Arrays.fill(sendByte, 0, Constant.MESSAGE_SIZE, (byte) 0);
 			byte messageByte[] = message.getBytes();
 			ByteBuffer byteBuffer = ByteBuffer.wrap(sendByte);
-			byteBuffer.position(pos);
+			byteBuffer.position(0);
 			byteBuffer.put(messageByte);
 			sendByte = byteBuffer.array();
 			
@@ -115,9 +116,9 @@ public class ChordListener extends Thread {
 }
 
 
+//Listens for assignment of new entry point.
+// This will be called whenever the entry point leaves the chord and its predecessor is assigned as new entry point
 class ChordEntryListener extends Thread {
-
-	private static final int messageSize = 64;
 
 	private ServerSocket serverSocket ;
 	private Socket socket;
@@ -127,7 +128,7 @@ class ChordEntryListener extends Thread {
 
 		try {
 
-			serverSocket = new ServerSocket(8881);
+			serverSocket = new ServerSocket(Constant.ENTRY_lISTENER_PORT);
 
 		}
 		catch( Exception e ) {
@@ -154,10 +155,13 @@ class ChordEntryListener extends Thread {
 		}
 	}
 
+	//Handler class for entry point listener and whenever a new entry point is selected it updates the Chord Server
+	// about it so that new nodes can enter with this new IP
+
 	private class ChordEntryHandler extends Thread {
 
 		Socket socket;
-		byte[] recvMessage =new byte[messageSize];
+		byte[] recvMessage =new byte[Constant.MESSAGE_SIZE];
 		String clientIP;
 
 		// constructor
@@ -178,7 +182,7 @@ class ChordEntryListener extends Thread {
 				dataInputStream.read(recvMessage, 0, recvMessage.length);
 
 				ChordListener.setChordIP(clientIP);
-				System.out.println("New Chord Entry Point set - " + clientIP);
+				System.out.println(clientIP+" is the entry point");
 
 			}
 			catch (IOException e) {

@@ -4,31 +4,19 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
-/**
- *
- * The class is a main program for Peers in chord. The class initially
- * requests calls the Bootstrap to join. The Bootstrap responses back with
- * a random zone number and an entrypoint IP. If the
- * peer is the first peer to the network, the Bootstrap makes the peer
- * as the entry point.
- *
- */
+
+// Main class that starts the peer.It initially requests calls to the ChordMain Server to join.
+// The ChordMain responds back with a random zone number and an entry point IP. If the
+// peer is the first peer to the network, the ChordMain makes the peer as the entry point.
+
 public class ChordPeerMain {
 
-	private static final int messageSize = 64;
 
-	public static final int n = 128;
-	public static final int m = 7;
 	public static String serverIP;
-
-	private int randomNumberGenerated;
-
+	private int nodeVal;
 	private String entryPoint;
-
 	private String currentIP;
-
-	private byte recvByte[] = new byte[messageSize];
-
+	private byte recvByte[] = new byte[Constant.MESSAGE_SIZE];
 	static boolean isEntryPoint = false;
 
 	// Main fuction
@@ -38,31 +26,25 @@ public class ChordPeerMain {
 		serverIP = args[0];
 
 		chordPeerMain.chordInitialize(serverIP);
-
-		ChordNode chordNode = new ChordNode(chordPeerMain.randomNumberGenerated, chordPeerMain.entryPoint, chordPeerMain.currentIP);
-
+		ChordNode chordNode = new ChordNode(chordPeerMain.nodeVal, chordPeerMain.entryPoint, chordPeerMain.currentIP);
 		chordNode.run();
 		
 	}
-
-	/**
-	 * Asks the bootstrap to join the chord network
-	 * @param serverIP IP of the bootstrap
-     */
+	// Asks the ChordMain Server to join the chord network
 	private void chordInitialize(String serverIP) {
 
 		try {
-			Socket socket = new Socket(serverIP, 8880);
+			Socket socket = new Socket(serverIP, Constant.SERVER_PORT);
 			currentIP = socket.getLocalSocketAddress().toString().replaceAll("^/+", "").split(":")[0];
 			DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
 
 			dataInputStream.read(recvByte, 0, recvByte.length);
 
-			String message = new String(Arrays.copyOfRange(recvByte, 0, messageSize)).trim(); //input from peer ie upload file, download file etc.
+			String message = new String(Arrays.copyOfRange(recvByte, 0, Constant.MESSAGE_SIZE)).trim(); //input from peer ie upload file, download file etc.
 
 			String messageArray[] = message.split(" ");
 
-			randomNumberGenerated = Integer.parseInt(messageArray[0]);
+			nodeVal = Integer.parseInt(messageArray[0]);
 
 			if (messageArray[1].equals("isEntryPoint")) {
 				isEntryPoint = true;

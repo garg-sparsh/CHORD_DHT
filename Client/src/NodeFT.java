@@ -9,19 +9,20 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.Arrays;
 
+
+//This is the lookup class that handles stabilization by updating finger table
+//whenever the node joins or leaves the system.
 public class NodeFT {
-	
-	private static final int messageSize = 64;
-	
-	private byte sendData[] = new byte[messageSize];
-	
+
+	private static final int messageSize = Constant.MESSAGE_SIZE;
+
 	private FTNodeDesc[] FTNodeDesc;
 	
 	private ChordNode chordNode = new ChordNode();
 	
 	public NodeFT() {
 		
-		FTNodeDesc = new FTNodeDesc[ChordPeerMain.m];
+		FTNodeDesc = new FTNodeDesc[Constant.M];
 		
 		for( int i = 0; i < FTNodeDesc.length; i++ ) {
 			FTNodeDesc[i] = new FTNodeDesc(i);
@@ -31,61 +32,61 @@ public class NodeFT {
 	
 	public void updateMyFT() {
 		
-		for(int i = 0; i < ChordPeerMain.m; i++ ) {
+		for(int i = 0; i < Constant.M; i++ ) {
 			FTNodeDesc[i].getIP();
 		}
 		
 	}
 	
-	 
+	 //used to create/update Finger table details for each node
 	public void runFT() {
 		
-		for(int i = 0; i < ChordPeerMain.m; i++ ) {
+		for(int i = 0; i < Constant.M; i++ ) {
 			
-			int zoneUpdatingFrom = ChordNode.getNodeStart() - ( (int) Math.pow(2, i) );
-			if( zoneUpdatingFrom < 0 ) {
-				zoneUpdatingFrom = ChordPeerMain.n + zoneUpdatingFrom;
+			int updateStart = ChordNode.getNodeStart() - ( (int) Math.pow(2, i) );
+			if( updateStart < 0 ) {
+				updateStart = Constant.N + updateStart;
 			}
 			
-			int zoneUpdatingTill = ChordNode.getNodeEnd() - ( (int) Math.pow(2, i) );
-			if( zoneUpdatingTill < 0 ) {
-				zoneUpdatingTill = ChordPeerMain.n + zoneUpdatingTill;
+			int updateEnd = ChordNode.getNodeEnd() - ( (int) Math.pow(2, i) );
+			if( updateEnd < 0 ) {
+				updateEnd = Constant.N + updateEnd;
 			}
 			
 			int times;
 			
-			if( zoneUpdatingFrom <= zoneUpdatingTill ) {
-				times = zoneUpdatingTill - zoneUpdatingFrom;
+			if( updateStart <= updateEnd ) {
+				times = updateEnd - updateStart;
 			}
 			else {
-				int times1 = ChordPeerMain.n - zoneUpdatingFrom + 1;
-				int times2 = zoneUpdatingTill - 0;
+				int times1 = Constant.N - updateStart + 1;
+				int times2 = updateEnd - 0;
 				
 				times = times1 + times2;
 				
 			}
 			
-			int zoneUpdating = zoneUpdatingFrom;
+			int update = updateStart;
 			
 			while( times >= 0 ) {
 				
-				if( zoneUpdating >= ChordNode.getNodeStart() && zoneUpdating <= ChordNode.getNodeEnd() ) {
+				if( update >= ChordNode.getNodeStart() && update <= ChordNode.getNodeEnd() ) {
 					
 				}
 				else {	
 		
-					String peerIP = chordNode.getKeySpaceIP(zoneUpdating, ChordNode.getSuccessor().getIP() );
+					String peerIP = chordNode.getKeySpaceIP(update, ChordNode.getSuccessor().getIP() );
 					String message[] = chordNode.getNodeDesc(peerIP);
 					
-					String zone[] = message[0].split(" ");
-					int endZone = Integer.parseInt(zone[1]);
+					String key[] = message[0].split(" ");
+					int end = Integer.parseInt(key[1]);
 					
-					if( zoneUpdating != endZone ) {
+					if( update != end ) {
 						
-						while( zoneUpdating != endZone ) {
-							zoneUpdating++;
-							if( zoneUpdating > ChordPeerMain.n - 1 ) {
-								zoneUpdating = zoneUpdating % ChordPeerMain.n;
+						while( update != end ) {
+							update++;
+							if( update > Constant.N - 1 ) {
+								update = update % Constant.N;
 							}
 							
 							times--;
@@ -101,10 +102,11 @@ public class NodeFT {
 					}
 				 
 					try {
-						Socket socket = new Socket( peerIP, 9994);
+						Socket socket = new Socket( peerIP, Constant.FINGER_TABLE_lISTENER);
 						
 						DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 						MakeMessage makeMessage = new MakeMessage();
+						byte sendData[] = new byte[messageSize];
 						sendData = makeMessage.message_creation(sendData, messageSize, i + "");
 						dataOutputStream.write(sendData);
 						dataOutputStream.flush();
@@ -115,12 +117,11 @@ public class NodeFT {
 						e.printStackTrace();
 					} 
 				}
-				
-				zoneUpdating++;
-				if( zoneUpdating > ChordPeerMain.n - 1 ) {
-					zoneUpdating = zoneUpdating % ChordPeerMain.n;
+
+				update++;
+				if( update > Constant.N - 1 ) {
+					update = update % Constant.N;
 				}
-				
 				times--;
 				
 			}
@@ -132,8 +133,8 @@ public class NodeFT {
 	}
 
 
-	public int getZone( int i ) {
-		return FTNodeDesc[i].zone;
+	public int getKeySpace( int i ) {
+		return FTNodeDesc[i].keySpaceValue;
 	}
 	
 	public String getPeerIP( int i ) {
@@ -143,33 +144,33 @@ public class NodeFT {
 	private class FTNodeDesc {
 		
 		int tableID;
-		int zone;
-		int zonePos;
+		int keySpaceValue;
+		int i;
 		String peerIP;
 		
 		public FTNodeDesc( int ID ) {
 			
 			this.tableID = ID;
-			
-			zonePos = (int) Math.pow(2, tableID);
-			
+
+			i = (int) Math.pow(2, tableID);
+
 			getIP();
-			
+
 		}
 				
 		public void getIP() {
-						
-			zone = ChordNode.getNodeEnd() + zonePos;
+
+			keySpaceValue = ChordNode.getNodeEnd() + i;
 			
-			if( zone > ChordPeerMain.n - 1 ) {
-				zone = zone % ChordPeerMain.n;
+			if( keySpaceValue > Constant.N - 1 ) {
+				keySpaceValue = keySpaceValue % Constant.N;
 			}
 			
-			if( zone >= ChordNode.getNodeStart() && zone <= ChordNode.getNodeEnd() ) {
+			if( keySpaceValue >= ChordNode.getNodeStart() && keySpaceValue <= ChordNode.getNodeEnd() ) {
 				peerIP = ChordNode.getMyIP();
 			}
 			else {
-				peerIP = chordNode.getKeySpaceIP(zone, ChordNode.getSuccessor().getIP() );
+				peerIP = chordNode.getKeySpaceIP(keySpaceValue, ChordNode.getSuccessor().getIP() );
 			}
 			
 		}
@@ -179,22 +180,24 @@ public class NodeFT {
 	
 }
 
+//This class is called whenever a peer leaves the system or joins the system and
+// Finger table of all the existing nodes need to be updated.
 class NodeFTUpdate extends Thread {
 
-	private static final int messageSize = 64;
+	private static final int messageSize = Constant.MESSAGE_SIZE;
 
-	private ServerSocket serverSocket;
+	private ServerSocket FTServer;
 
 	Socket socket;
 
-	private boolean isServerRunning;
+	private boolean isFTServerRunning;
 
 	// constructor
 	public NodeFTUpdate() {
 
 		try {
-			isServerRunning = true;
-			serverSocket = new ServerSocket(9994);
+			isFTServerRunning = true;
+			FTServer = new ServerSocket(Constant.FINGER_TABLE_lISTENER);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -204,11 +207,11 @@ class NodeFTUpdate extends Thread {
 	// thread starts
 	public void run() {
 
-		while (isServerRunning) {
+		while (isFTServerRunning) {
 
 			try {
 
-				socket = serverSocket.accept();
+				socket = FTServer.accept();
 
 				new PeerLookUpUpdateHandler(socket).start();
 
@@ -257,40 +260,38 @@ class NodeFTUpdate extends Thread {
 
 	}
 
-	/**
-	 * stops serverSocket
-	 */
+	//stop FTServerSocket
 	public void stopServer() {
 		try {
-			serverSocket.close();
+			FTServer.close();
 		} catch (IOException e) {
 
 		}
-		isServerRunning = false;
+		isFTServerRunning = false;
 	}
 
 }
 
-
+// this class is used to store the neighbours of the node ie predecessors and successors
 class Neighbour {
 
 	private String ip;
-	private int zoneSrt;
-	private int zoneEnd;
+	private int keySpaceStart;
+	private int keySpaceEnd;
 
 	// constructor
-	public Neighbour(String ip, int zoneSrt, int zoneEnd) {
+	public Neighbour(String ip, int start, int end) {
 
 		this.ip = ip;
-		this.zoneSrt = zoneSrt;
-		this.zoneEnd = zoneEnd;
+		this.keySpaceStart = start;
+		this.keySpaceEnd = end;
 
 	}
 
-	public void updateZone(String ip, int zoneSrt, int zoneEnd) {
+	public void updateKeySpace(String ip, int start, int end) {
 		this.ip = ip;
-		this.zoneSrt = zoneSrt;
-		this.zoneEnd = zoneEnd;
+		this.keySpaceStart = start;
+		this.keySpaceEnd = end;
 	}
 
 	// getter for IP
@@ -298,21 +299,23 @@ class Neighbour {
 		return ip;
 	}
 
-	// getter for start zone
+	// getter for start key
 	public int getNodeStart() {
-		return zoneSrt;
+		return keySpaceStart;
 	}
 
-	// geter for end zone
+	// geter for end key
 	public int getNodeEnd() {
-		return zoneEnd;
+		return keySpaceEnd;
 	}
 
 }
 
+//Get the updates of successors and predecessors from the other nodes in the chord,
+// and to maintain the consistency multithreading is applied for multiple clients at same time
 class NeighbourUpdate extends Thread {
 
-	private static final int messageSize = 64;
+	private static final int messageSize = Constant.MESSAGE_SIZE;
 
 	private ServerSocket serverSocket;
 	Socket socket;
@@ -322,7 +325,7 @@ class NeighbourUpdate extends Thread {
 	public NeighbourUpdate() {
 
 		try {
-			serverSocket = new ServerSocket(9992);
+			serverSocket = new ServerSocket(Constant.KEY_SPACE_lISTENER_PORT);
 			isServerRunning = true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -332,30 +335,21 @@ class NeighbourUpdate extends Thread {
 
 	// thread starts
 	public void run() {
-
-
-
 		while (isServerRunning) {
-
 			try {
 
 				socket = serverSocket.accept();
 
-				new PeerNeighbourUpdateHandler(socket).start();
+				new NeighbourUpdateHandler(socket).start();
 
 			} catch (IOException e) {
 
 			}
 
 		}
-
-		// socket.close();
-
 	}
 
-	/**
-	 * closes serverSocket
-	 */
+	//stop server
 	public void stopServer() {
 		try {
 			serverSocket.close();
@@ -365,21 +359,15 @@ class NeighbourUpdate extends Thread {
 		isServerRunning = false;
 	}
 
-	/**
-	 *
-	 * The class is a supporter class for NeighbourUpdate.
-	 *
-	 */
-	private class PeerNeighbourUpdateHandler extends Thread {
+
+	private class NeighbourUpdateHandler extends Thread {
 
 		Socket socket;
-
 		String clientIP;
-
 		byte recvData[] = new byte[messageSize];
 
 		// constructor
-		public PeerNeighbourUpdateHandler(Socket socket) {
+		public NeighbourUpdateHandler(Socket socket) {
 
 			this.socket = socket;
 			clientIP = socket.getInetAddress().toString();
@@ -413,9 +401,10 @@ class NeighbourUpdate extends Thread {
 
 }
 
+//this Class sends files which are requested by other nodes in the chord
 class TransferListener extends Thread {
 	//data members to read and send the file
-	private static final int messageSize = 1024;
+	private static final int messageSize = Constant.FILE_MSG_SIZE;
 
 	private ServerSocket serverSocket;
 
@@ -431,13 +420,10 @@ class TransferListener extends Thread {
 	private long fileSize;
 	private int totalPackets;
 
-	/**
-	 * constructor of the class
-	 */
 	public TransferListener() {
 
 		try {
-			serverSocket = new ServerSocket(9485);
+			serverSocket = new ServerSocket(Constant.DOWNLOAD_PORT);
 			isServerRunning = true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -476,28 +462,21 @@ class TransferListener extends Thread {
 		}
 		isServerRunning = false;
 	}
-	/**
-	 * class to handle the thread of the above class
-	 *
-	 */
+
+	// class to handle the thread of the TransferListener class
 	private class FileUploadHandler extends Thread {
 
 		Socket socket;
 
 		byte sendData[] = new byte[messageSize];
 		byte recvData[] = new byte[messageSize];
-		/**
-		 * constructor for the class
-		 * @param socket-socket to send and receive request
-		 */
+
 		public FileUploadHandler(Socket socket) {
 
 			this.socket = socket;
 
 		}
-		/**
-		 * method to handle the thread of the class
-		 */
+
 		public void run() {
 
 			try {
@@ -520,15 +499,13 @@ class TransferListener extends Thread {
 					sendData = data.getBytes();
 					dataOutputStream.write(sendData);
 				}
-				ChordNode.printOptionsMenu();
+				ChordNode.menu();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
 		}
-		/**
-		 * method to send the file packets
-		 */
+
 		private void packetsToSend() {
 			try {
 
@@ -541,10 +518,8 @@ class TransferListener extends Thread {
 					dataOutputStream.write(fileInPackets[i]);
 				}
 			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -569,16 +544,14 @@ class TransferListener extends Thread {
 			fileInPackets = new byte[totalPackets][messageSize];
 			for (int i = 0; i < totalPackets - 1; i++)
 				System.arraycopy(fileInBytes, i * messageSize, fileInPackets[i], 0, messageSize);
-			System.arraycopy(fileInBytes, (totalPackets - 1) * messageSize, fileInPackets[totalPackets - 1], 0, (int) fileSize - (totalPackets - 1) * 1024);
+			System.arraycopy(fileInBytes, (totalPackets - 1) * messageSize, fileInPackets[totalPackets - 1], 0, (int) fileSize - (totalPackets - 1) * Constant.FILE_MSG_SIZE);
 
 		}
 	}
 }
 
+//Converts the string to bytes to transfer the packets over sockets
 class MakeMessage{
-
-	public MakeMessage(){
-		}
 
 	public byte[] message_creation(byte[] sendData, int messageSize, String message){
 		Arrays.fill(sendData, 0, messageSize, (byte) 0);
@@ -589,14 +562,4 @@ class MakeMessage{
 		sendData = byteBuffer.array();
 		return sendData;
 		}
-
-	public byte[] message_creation(byte[] sendData, int messageSize, String message, int pos){
-		Arrays.fill(sendData, 0, messageSize, (byte) 0);
-		byte messageByte[] = message.getBytes();
-		ByteBuffer byteBuffer = ByteBuffer.wrap(sendData);
-		byteBuffer.position(pos);
-		byteBuffer.put(messageByte);
-		sendData = byteBuffer.array();
-		return sendData;
-	}
 }
