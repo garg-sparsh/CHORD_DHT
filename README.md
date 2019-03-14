@@ -29,22 +29,17 @@ Steps to run the program:
    
    `5 - Files present at this node`
 
-9. if user selects 1:
-        Displays finger table for the current node
+9. if user selects 1: Displays finger table for the current node
         
-   if user selects 2:
-        Node will be removed from the chord and all the files it possess will be transferred to it’s predecessor
-        However, if the node is an entry point, leader election occurs and its predecessor is assigned as chord’s new entry           point
+   if user selects 2: Node will be removed from the chord and all the files it possess will be transferred to it’s predecessor
+        However, if the node is an entry point, leader election occurs and its predecessor is assigned as chord’s new entry         point
    
-   if user selects 3:
-        User will be prompted to upload a file from the node [Example: /home/WebServices-Tutorial.pdf]
+   if user selects 3: User will be prompted to upload a file from the node [Example: /home/WebServices-Tutorial.pdf]
    
-   if user selects 4:
-        User will be prompted to enter file name that user wants to be downloaded in the current node
+   if user selects 4: User will be prompted to enter file name that user wants to be downloaded in the current node
         [Example: WebServices- Tutorial.pdf]
         
-   if user selects 5:
-        Lists all the files available at the current node.
+   if user selects 5: Lists all the files available at the current node.
 
 
 References:
