@@ -39,13 +39,22 @@ Steps to run the program:
 References:
 
 [1]Ion Stoicay, Robert Morrisz, David Liben-Nowellz, David R.Kargerz, M.Frans Kaashoekz, Frank Dabekz, Hari Balakrishnanz, “Chord:A Scalable Peer to peer Lookup Protocol for Internet Applications”, M.S. thesis, University of Massachusetts,June 2002
+
 [2]https://medium.com/@siddontang/build-up-a-high-availability-distributed-key-value-store-b4e02bc46e9e
+
 [3]https://ayende.com/blog/3827/rhino-dht-concurrency-handling-example-the-phone-billing-system
+
 [4]https://www.geeksforgeeks.org/socket-programming-in-java/
+
 [5]https://github.com/srinivasmaram/KeyValueStore1
+
 [6]https://github.com/krishprasadar/CHORD_DHT
+
 [7]https://github.com/savoirfairelinux/opendht
+
 [8]https://docs.oracle.com/javase/8/docs/api/
+
 [9]https://www.usenix.org/legacy/publications/library/proceedings/osdi2000/full_papers/gribble/gribble_html/node4.html
+
 [10]https://hub.packtpub.com/distributed-hash-tables/
 
