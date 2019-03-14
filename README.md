@@ -17,7 +17,7 @@ Steps to run the program:
 5. Run Server: java ChordMain
 6. Run peer nodes on other available machines: java ChordPeerMain <IP of server>
 7. Choose one of the 5 actions to perform on each of the node:
-> 1 - Finger Table Details
+  > 1 - Finger Table Details
   > 2 - Leave chord
   > 3 - Upload File
   >4 - Download File
