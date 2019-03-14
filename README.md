@@ -10,7 +10,7 @@ Steps to run the program:
 2. Install jre on each machine: sudo yum install java-1.8.0-openjdk
 3. Install jdk on each machine: sudo yum install java-1.8.0-openjdk-devel
 4. Compile all the classes in all the machines by using the command
->sudo javac /home/sparshgarg56/CHORD_DHT/Client/src/*.java
+>sudo javac /home/sparshgarg56/CHORD_DHT/Client/src/*.java\n
 >sudo javac /home/sparshgarg56/CHORD_DHT/server/src/*.java
 
 5. Run Server: java ChordMain
